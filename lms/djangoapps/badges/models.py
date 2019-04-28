@@ -49,6 +49,7 @@ class BadgeClass(models.Model):
     Specifies a badge class to be registered with a backend.
     """
     slug = models.SlugField(max_length=255, validators=[validate_lowercase])
+    badgr_server_slug = models.SlugField(max_length=255, default='')
     issuing_component = models.SlugField(max_length=50, default='', blank=True, validators=[validate_lowercase])
     display_name = models.CharField(max_length=255)
     course_id = CourseKeyField(max_length=255, blank=True, default=None)
