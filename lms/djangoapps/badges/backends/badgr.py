@@ -35,14 +35,14 @@ class BadgrBackend(BadgeBackend):
         """
         Base URL for all API requests.
         """
-        return "{}/v1/issuer/issuers/{}".format(settings.BADGR_BASE_URL, settings.BADGR_ISSUER_SLUG)
+        return "{}/v2/issuers/{}".format(settings.BADGR_BASE_URL, settings.BADGR_ISSUER_SLUG)
 
     @lazy
     def _badge_create_url(self):
         """
         URL for generating a new Badge specification
         """
-        return "{}/badges".format(self._base_url)
+        return "{}/badgeclasses".format(self._base_url)
 
     def _badge_url(self, slug):
         """
