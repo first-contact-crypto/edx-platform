@@ -149,8 +149,8 @@ class LmsModuleSystem(ModuleSystem):  # pylint: disable=abstract-method
         )
         services['settings'] = SettingsService()
         services['user_tags'] = UserTagsService(self)
-        if badges_enabled():
-            services['badging'] = BadgingService(course_id=kwargs.get('course_id'), modulestore=store)
+        # if badges_enabled():
+        services['badging'] = BadgingService(course_id=kwargs.get('course_id'), modulestore=store)
         self.request_token = kwargs.pop('request_token', None)
         super(LmsModuleSystem, self).__init__(**kwargs)
 
