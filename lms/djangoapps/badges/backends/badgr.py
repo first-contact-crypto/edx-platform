@@ -203,9 +203,10 @@ class BadgrBackend(BadgeBackend):
         #     'email': user.email,
         #     'evidence': evidence_url,
         # }
+        LOGGER.info("the badge_class.slug is: {}".format(badge_class.slug))
         data = {}
         response = requests.post(
-            self._assertions_url(badge_class.badgr_server_slug), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(badge_class.slug), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
         # LOGGER.info('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
 
