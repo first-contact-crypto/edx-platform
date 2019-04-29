@@ -150,11 +150,15 @@ class BadgrBackend(BadgeBackend):
                 u"Filename was: {}".format(image.name)
             )
         files = {'image': (image.name, image, content_type)}
+        # data = {
+        #     'name': badge_class.display_name,
+        #     'criteria': badge_class.criteria,
+        #     'slug': self._slugify(badge_class),
+        #     'description': badge_class.description,
+        # }
         data = {
             'name': badge_class.display_name,
-            'criteria': badge_class.criteria,
-            'slug': self._slugify(badge_class),
-            'description': badge_class.description,
+            'description': badge_class.description
         }
 
         result = requests.post(
@@ -195,10 +199,11 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
-        data = {
-            'email': user.email,
-            'evidence': evidence_url,
-        }
+        # data = {
+        #     'email': user.email,
+        #     'evidence': evidence_url,
+        # }
+        data = {}
         response = requests.post(
             self._assertions_url(badge_class.badgr_server_slug), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
