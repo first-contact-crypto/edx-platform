@@ -45,9 +45,9 @@ class BadgrBackend(BadgeBackend):
         Assertions centric functionality
         """
         if slug:
-            return "{}/assertions/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+            return "{}/assertions".format(self._badgeclasses_url(True))
         else:
-            return "{}/assertions".format(self._base_url)
+            pass
 
     # NEW
     def _badgeclasses_url(self, slug=False):
@@ -207,6 +207,8 @@ class BadgrBackend(BadgeBackend):
         response = requests.post(
             self._assertions_url(slug=True), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
+        # LOGGER.info('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
+
         self._log_if_raised(response, data)
         assertion, __ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
         assertion.data = response.json()
