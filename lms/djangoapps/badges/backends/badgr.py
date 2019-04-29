@@ -35,7 +35,55 @@ class BadgrBackend(BadgeBackend):
         """
         Base URL for all API requests.
         """
-        return "{}/v2/issuers/{}".format(settings.BADGR_BASE_URL, settings.BADGR_ISSUER_SLUG)
+        # return "{}/v2/issuers/{}".format(settings.BADGR_BASE_URL, settings.BADGR_ISSUER_SLUG)
+        return "{}/v2".format(settings.BADGR_BASE_URL)
+
+    # NEW
+    def _assertions_url(self, slug=False):
+      """
+      Assertions centric functionality
+      """
+      if slug:
+        return "{}/assertions/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+      else:
+        return "{}/assertions".format(self._base_url)
+
+    # NEW
+    def _badgeclasses_url(self, slug=False):
+      """
+      Badge Class centric functionality.
+      """
+      if slug:
+        return "{}/badgeclasses/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+      else:
+        return "{}/badgeclasses".format(self._base_url)
+
+    # # NEW
+    # @lazy
+    # def _backpack_url(self):
+    #   """
+    #   Backpack centric functionality
+    #   """
+    #   return "{}/backpack".format(self._base_url)
+
+    # # NEW
+    # @lazy
+    # def _issuers_url(self):
+    #   """
+    #   Issuer centric functionality
+    #   """
+    #   return "{}/issuers/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+
+    # # NEW
+    # @lazy
+    # def _badgeusers_url(self):
+    #   """
+    #   User centric 
+    #   """
+    #   return "{}/users/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+
+
+
 
     @lazy
     def _badge_create_url(self):
@@ -109,7 +157,7 @@ class BadgrBackend(BadgeBackend):
             'description': badge_class.description,
         }
         result = requests.post(
-            self._badge_create_url, headers=self._get_headers(), data=data, files=files,
+            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
             timeout=settings.BADGR_TIMEOUT
         )
         self._log_if_raised(result, data)
@@ -151,7 +199,7 @@ class BadgrBackend(BadgeBackend):
             'evidence': evidence_url,
         }
         response = requests.post(
-            self._assertion_url(badge_class.badgr_server_slug), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(slug=True), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
         self._log_if_raised(response, data)
         assertion, __ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
@@ -177,7 +225,7 @@ class BadgrBackend(BadgeBackend):
         slug = badge_class.badgr_server_slug
         if slug in BadgrBackend.badges:
             return
-        response = requests.get(self._badge_url(slug), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
+        response = requests.get(self._badgeclasses_url(slug=True), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
         if response.status_code != 200:
             self._create_badge(badge_class)
         BadgrBackend.badges.append(slug)
