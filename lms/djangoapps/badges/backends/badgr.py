@@ -128,6 +128,7 @@ class BadgrBackend(BadgeBackend):
         """
         Log server response if there was an error.
         """
+        LOGGER.info("RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
         try:
             response.raise_for_status()
         except HTTPError:
