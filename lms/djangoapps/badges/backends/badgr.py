@@ -13,6 +13,7 @@ from requests.packages.urllib3.exceptions import HTTPError
 
 from badges.backends.base import BadgeBackend
 from badges.models import BadgeAssertion
+from badges.models import BadgeClass
 from eventtracking import tracker
 
 MAX_SLUG_LENGTH = 255
@@ -40,23 +41,23 @@ class BadgrBackend(BadgeBackend):
 
     # NEW
     def _assertions_url(self, slug=False):
-      """
-      Assertions centric functionality
-      """
-      if slug:
-        return "{}/assertions/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
-      else:
-        return "{}/assertions".format(self._base_url)
+        """
+        Assertions centric functionality
+        """
+        if slug:
+            return "{}/assertions/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+        else:
+            return "{}/assertions".format(self._base_url)
 
     # NEW
     def _badgeclasses_url(self, slug=False):
-      """
-      Badge Class centric functionality.
-      """
-      if slug:
-        return "{}/badgeclasses/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
-      else:
-        return "{}/badgeclasses".format(self._base_url)
+        """
+        Badge Class centric functionality.
+        """
+        if slug:
+            return "{}/badgeclasses/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+        else:
+            return "{}/badgeclasses".format(self._base_url)
 
     # # NEW
     # @lazy
@@ -66,24 +67,28 @@ class BadgrBackend(BadgeBackend):
     #   """
     #   return "{}/backpack".format(self._base_url)
 
-    # # NEW
-    # @lazy
-    # def _issuers_url(self):
-    #   """
-    #   Issuer centric functionality
-    #   """
-    #   return "{}/issuers/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+    # NEW
+    @lazy
+    def _issuers_url(self):
+      """
+      Issuer centric functionality
+      """
+      return "{}/issuers/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+
+    # NEW
+    @lazy
+    def _issuers_badgeclasses_url(self):
+        """
+        """
+        return "{}/badgeclasses".format(self._issuers_url)
 
     # # NEW
     # @lazy
     # def _badgeusers_url(self):
     #   """
-    #   User centric 
+    #   User centric
     #   """
     #   return "{}/users/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
-
-
-
 
     @lazy
     def _badge_create_url(self):
@@ -156,8 +161,9 @@ class BadgrBackend(BadgeBackend):
             'slug': self._slugify(badge_class),
             'description': badge_class.description,
         }
+
         result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
+            self._issuers_badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
             timeout=settings.BADGR_TIMEOUT
         )
         self._log_if_raised(result, data)
