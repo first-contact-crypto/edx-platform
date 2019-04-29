@@ -163,7 +163,7 @@ class BadgrBackend(BadgeBackend):
         }
 
         result = requests.post(
-            self._issuers_badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
+            self._issuers_badgeclasses_url, headers=self._get_headers(), data=data, files=files,
             timeout=settings.BADGR_TIMEOUT
         )
         self._log_if_raised(result, data)
