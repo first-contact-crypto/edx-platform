@@ -36,77 +36,71 @@ class BadgrBackend(BadgeBackend):
         """
         Base URL for all API requests.
         """
-        # return "{}/v2/issuers/{}".format(settings.BADGR_BASE_URL, settings.BADGR_ISSUER_SLUG)
         return "{}/v2".format(settings.BADGR_BASE_URL)
 
     # NEW
-    def _assertions_url(self, slug=False):
-        """
-        Assertions centric functionality
-        """
-        if slug:
-            return "{}/assertions".format(self._badgeclasses_url(True))
-        else:
-            pass
-
-    # NEW
-    def _badgeclasses_url(self, slug=False):
+    def _badgeclasses_url(self, issuer_slug=settings.BADGR_ISSUER_SLUG):
         """
         Badge Class centric functionality.
         """
-        if slug:
-            return "{}/badgeclasses/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
-        else:
-            return "{}/badgeclasses".format(self._base_url)
+        return "{}/issuers/{}/badgeclasses".format(self._base_url, issuer_slug)
+
+
+        # NEW
+    def _assertions_url(self, badgeclass_slug):
+        """
+        Assertions centric functionality
+        """
+        return "{}/badgeclasses/{}/assertions".format(self._base_url, badgeclass_slug)
+
+    # # # NEW
+    # # @lazy
+    # # def _backpack_url(self):
+    # #   """
+    # #   Backpack centric functionality
+    # #   """
+    # #   return "{}/backpack".format(self._base_url)
 
     # # NEW
     # @lazy
-    # def _backpack_url(self):
+    # def _issuers_url(self):
     #   """
-    #   Backpack centric functionality
+    #   Issuer centric functionality
     #   """
-    #   return "{}/backpack".format(self._base_url)
-
-    # NEW
-    @lazy
-    def _issuers_url(self):
-      """
-      Issuer centric functionality
-      """
-      return "{}/issuers/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
-
-    # NEW
-    @lazy
-    def _issuers_badgeclasses_url(self):
-        """
-        """
-        return "{}/badgeclasses".format(self._issuers_url)
+    #   return "{}/issuers/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
 
     # # NEW
     # @lazy
-    # def _badgeusers_url(self):
-    #   """
-    #   User centric
-    #   """
-    #   return "{}/users/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
+    # def _issuers_badgeclasses_url(self):
+    #     """
+    #     """
+    #     return "{}/badgeclasses".format(self._issuers_url)
 
-    @lazy
-    def _badge_create_url(self):
-        """
-        URL for generating a new Badge specification
-        """
-        return "{}/badgeclasses".format(self._base_url)
+    # # # NEW
+    # # @lazy
+    # # def _badgeusers_url(self):
+    # #   """
+    # #   User centric
+    # #   """
+    # #   return "{}/users/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
 
-    def _badge_url(self, slug):
-        """
-        Get the URL for a course's badge in a given mode.
-        """
-        return "{}/{}".format(self._badge_create_url, slug)
+    # @lazy
+    # def _badge_create_url(self):
+    #     """
+    #     URL for generating a new Badge specification
+    #     """
+    #     return "{}/badgeclasses".format(self._base_url)
 
-    def _assertion_url(self, slug):
-        """
-        URL for generating a new assertion.
-        """
+    # def _badge_url(self, slug):
+    #     """
+    #     Get the URL for a course's badge in a given mode.
+    #     """
+    #     return "{}/{}".format(self._badge_create_url, slug)
+
+    # def _assertion_url(self, slug):
+    #     """
+    #     URL for generating a new assertion.
+    #     """
 
         return "{}/assertions".format(self._base_url)
 
@@ -164,7 +158,7 @@ class BadgrBackend(BadgeBackend):
         }
 
         result = requests.post(
-            self._issuers_badgeclasses_url, headers=self._get_headers(), data=data, files=files,
+            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
             timeout=settings.BADGR_TIMEOUT
         )
         self._log_if_raised(result, data)
@@ -206,7 +200,7 @@ class BadgrBackend(BadgeBackend):
             'evidence': evidence_url,
         }
         response = requests.post(
-            self._assertions_url(slug=True), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(badge_class), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
         # LOGGER.info('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
 
@@ -234,7 +228,7 @@ class BadgrBackend(BadgeBackend):
         slug = badge_class.badgr_server_slug
         if slug in BadgrBackend.badges:
             return
-        response = requests.get(self._badgeclasses_url(slug=True), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
+        response = requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
         if response.status_code != 200:
             self._create_badge(badge_class)
         BadgrBackend.badges.append(slug)
