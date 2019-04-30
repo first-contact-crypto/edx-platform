@@ -48,9 +48,9 @@ class BadgeClass(models.Model):
     """
     Specifies a badge class to be registered with a backend.
     """
-    slug = models.SlugField(max_length=255, validators=[validate_lowercase])
+    slug = models.SlugField(max_length=255)
     badgr_server_slug = models.SlugField(max_length=255, default='')
-    issuing_component = models.SlugField(max_length=50, default='', blank=True, validators=[validate_lowercase])
+    issuing_component = models.SlugField(max_length=50, default='', blank=True)
     display_name = models.CharField(max_length=255)
     course_id = CourseKeyField(max_length=255, blank=True, default=None)
     description = models.TextField()
@@ -128,8 +128,8 @@ class BadgeClass(models.Model):
         """
         Slugs must always be lowercase.
         """
-        self.slug = self.slug and self.slug.lower()
-        self.issuing_component = self.issuing_component and self.issuing_component.lower()
+        # self.slug = self.slug and self.slug.lower()
+        # self.issuing_component = self.issuing_component and self.issuing_component.lower()
         super(BadgeClass, self).save(**kwargs)
 
     class Meta(object):
