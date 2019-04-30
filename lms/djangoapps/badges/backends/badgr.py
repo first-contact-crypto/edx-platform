@@ -228,7 +228,9 @@ class BadgrBackend(BadgeBackend):
         )
         self._log_if_raised(response, data)
 
-        assertion, _ = BadgeAssertion.objects.get_or_create(user=user)  
+        # assertion, _ = BadgeAssertion.objects.get_or_create(user=user)
+        assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
+
         assertion.badge_class = badge_class
 
         # try:
