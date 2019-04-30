@@ -47,11 +47,11 @@ class BadgrBackend(BadgeBackend):
 
 
         # NEW
-    def _assertions_url(self, badgeclass_slug):
+    def _assertions_url(self, issuer_slug):
         """
         Assertions centric functionality
         """
-        return "{}/badgeclasses/{}/assertions".format(self._base_url, badgeclass_slug)
+        return "{}/issuers/{}/assertions".format(self._base_url, issuer_slug)
 
     # # # NEW
     # # @lazy
@@ -220,7 +220,7 @@ class BadgrBackend(BadgeBackend):
             }
         }
         response = requests.post(
-            self._assertions_url(badge_class.slug), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
         # LOGGER.info('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
 
