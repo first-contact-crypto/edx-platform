@@ -206,7 +206,19 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("CREATE ASSERTION.. the badge_class.slug is: {}".format(badge_class.slug))
         # LOGGER.info("CREATE ASSERTION.. the badge_class.badgeclass_slug is {}".format(badge_class.badgeclass_slug))
         LOGGER.info("CREATE ASSERTION.. the badge_class.badgr_server_slug is: {}".format(badge_class.badgr_server_slug))
-        data = {}
+        data = {
+            'issuer': settings.BADGR_ISSUER_SLUG,
+            'evidence': {
+                'url': evidence_url,
+                'narrative': "You need to pass"
+            },
+            'recipient': {
+                'identity': user.email,
+                'type': 'email',
+                'hashed': False,
+                'plaintextIdentity': user.id
+            }
+        }
         response = requests.post(
             self._assertions_url(badge_class.slug), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
