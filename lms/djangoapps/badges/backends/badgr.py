@@ -228,13 +228,14 @@ class BadgrBackend(BadgeBackend):
         )
         self._log_if_raised(response, data)
 
-        # assertion, __ = BadgeAssertion.objects.get_or_create(badge_class=badge_class, user=user)  
+        assertion, __ = BadgeAssertion.objects.get_or_create(user=user)  
+        assertion.badge_class = badge_class
 
-        try:
-            assertion = BadgeAssertion.objects.get(user=user, badge_class=badge_class)
-        except BadgeAssertion.DoesNotExist:
-            assertion = BadgeAssertion(user=user, badge_class=badge_class)
-            assertion.save()
+        # try:
+        #     assertion = BadgeAssertion.objects.get(user=user, badge_class=badge_class)
+        # except BadgeAssertion.DoesNotExist:
+        #     assertion = BadgeAssertion(user=user, badge_class=badge_class)
+        #     assertion.save()
 
 
         assertion.data = response.json()
