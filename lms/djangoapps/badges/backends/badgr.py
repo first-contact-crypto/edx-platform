@@ -47,11 +47,11 @@ class BadgrBackend(BadgeBackend):
 
         # NEW
 
-    def _assertions_url(self, issuer_slug):
+    def _assertions_url(self, badge_slug):
         """
         Assertions centric functionality
         """
-        return "{}/issuers/{}/assertions".format(self._base_url, issuer_slug)
+        return "{}/badgeclasses/{}/assertions".format(self._base_url, badge_slug)
 
     # # # NEW
     # # @lazy
@@ -224,7 +224,7 @@ class BadgrBackend(BadgeBackend):
         }
 
         response = requests.post(
-            self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(badge_class.slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
         )
 
         self._log_if_raised(response, data)
