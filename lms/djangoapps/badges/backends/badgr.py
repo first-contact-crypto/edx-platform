@@ -215,10 +215,10 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
         data = {
             'recipient': {
-                'identity': str(user.id) + '@firstcontactcrypto.com',
+                'identity': 'johndoe@firstcontactcrypto.com',
                 'type': 'email',
                 'hashed': 'false',
-                'plaintextIdentity': str(user.id)
+                'plaintextIdentity': 'johndoe'
             }
         }
 
