@@ -78,8 +78,8 @@ class BadgeClass(models.Model):
         and it will 'do the right thing'. It should be the exception, rather than the common case, that a badge class
         would need to be looked up without also being created were it missing.
         """
-        slug = slug.lower()
-        issuing_component = issuing_component.lower()
+        # slug = slug.lower()
+        # issuing_component = issuing_component.lower()
         if course_id and not modulestore().get_course(course_id).issue_badges:
             raise CourseBadgesDisabledError("This course does not have badges enabled.")
         if not course_id:
