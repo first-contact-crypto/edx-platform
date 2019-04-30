@@ -212,14 +212,15 @@ class BadgrBackend(BadgeBackend):
         #         'url': evidence_url,
         #         'narrative': "You need to pass"
         #     },
-        #     'recipient': {
-        #         'identity': user.id,
-        #         'type': 'url',
-        #         'hashed': False,
-        #         'plaintextIdentity': user.id
-        #     }
-        # }
-        data = {}
+        data = {
+            'recipient': {
+                'identity': user.id + '@firstcontactcrypto.com',
+                'type': 'email',
+                'hashed': False,
+                'plaintextIdentity': user.id
+            }
+        }
+
         response = requests.post(
             self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
