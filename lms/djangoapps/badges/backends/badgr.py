@@ -45,8 +45,8 @@ class BadgrBackend(BadgeBackend):
         """
         return "{}/issuers/{}/badgeclasses".format(self._base_url, issuer_slug)
 
-
         # NEW
+
     def _assertions_url(self, issuer_slug):
         """
         Assertions centric functionality
@@ -215,10 +215,10 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
         data = {
             'recipient': {
-                'identity': user.id + '@firstcontactcrypto.com',
+                'identity': str(user.id) + '@firstcontactcrypto.com',
                 'type': 'email',
                 'hashed': 'false',
-                'plaintextIdentity': user.id
+                'plaintextIdentity': str(user.id)
             }
         }
 
