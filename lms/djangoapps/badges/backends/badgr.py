@@ -226,9 +226,9 @@ class BadgrBackend(BadgeBackend):
         response = requests.post(
             self._assertions_url(badge_class.slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
         )
-
         self._log_if_raised(response, data)
-        assertion, __ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
+
+        assertion, __ = BadgeAssertion.objects.get_or_create(badge_class=badge_class, user=user)
         assertion.data = response.json()
         assertion.backend = 'BadgrBackend'
         assertion.image_url = assertion.data['image']
@@ -236,6 +236,7 @@ class BadgrBackend(BadgeBackend):
         assertion.save()
         self._send_assertion_created_event(user, assertion)
         return assertion
+
 
     @staticmethod
     def _get_headers():
