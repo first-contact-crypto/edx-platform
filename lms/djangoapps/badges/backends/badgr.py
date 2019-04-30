@@ -217,13 +217,13 @@ class BadgrBackend(BadgeBackend):
             'recipient': {
                 'identity': 'johndoe@firstcontactcrypto.com',
                 'type': 'email',
-                'hashed': 'false',
+                'hashed': False,
                 'plaintextIdentity': 'johndoe'
             }
         }
 
         response = requests.post(
-            self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), jason=data, timeout=settings.BADGR_TIMEOUT
         )
 
         self._log_if_raised(response, data)
