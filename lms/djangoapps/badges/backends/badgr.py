@@ -223,7 +223,7 @@ class BadgrBackend(BadgeBackend):
         }
 
         response = requests.post(
-            self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), jason=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
         )
 
         self._log_if_raised(response, data)
