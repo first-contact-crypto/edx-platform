@@ -204,7 +204,7 @@ class BadgrBackend(BadgeBackend):
         #     'evidence': evidence_url,
         # }
         LOGGER.info("CREATE ASSERTION.. the badge_class.slug is: {}".format(badge_class.slug))
-        LOGGER.info("CREATE ASSERTION.. the badge_class.badgeclass_slug is {}".format(badge_class.badgeclass_slug))
+        # LOGGER.info("CREATE ASSERTION.. the badge_class.badgeclass_slug is {}".format(badge_class.badgeclass_slug))
         LOGGER.info("CREATE ASSERTION.. the badge_class.badgr_server_slug is: {}".format(badge_class.badgr_server_slug))
         data = {}
         response = requests.post(
