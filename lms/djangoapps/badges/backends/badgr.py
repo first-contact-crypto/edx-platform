@@ -217,7 +217,7 @@ class BadgrBackend(BadgeBackend):
             'recipient': {
                 'identity': user.id + '@firstcontactcrypto.com',
                 'type': 'email',
-                'hashed': False,
+                'hashed': 'false',
                 'plaintextIdentity': user.id
             }
         }
