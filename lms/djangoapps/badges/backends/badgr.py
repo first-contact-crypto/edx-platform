@@ -213,8 +213,8 @@ class BadgrBackend(BadgeBackend):
                 'narrative': "You need to pass"
             },
             'recipient': {
-                'identity': user.email,
-                'type': 'email',
+                'identity': user.id,
+                'type': 'url',
                 'hashed': False,
                 'plaintextIdentity': user.id
             }
