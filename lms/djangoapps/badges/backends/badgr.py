@@ -219,7 +219,8 @@ class BadgrBackend(BadgeBackend):
                 'type': 'email',
                 'hashed': False,
                 'plaintextIdentity': 'johndoe'
-            }
+            },
+            'badgeclass': badge_class.slug 
         }
 
         response = requests.post(
