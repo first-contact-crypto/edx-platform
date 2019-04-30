@@ -212,6 +212,7 @@ class BadgrBackend(BadgeBackend):
         #         'url': evidence_url,
         #         'narrative': "You need to pass"
         #     },
+        LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
         data = {
             'recipient': {
                 'identity': user.id + '@firstcontactcrypto.com',
@@ -224,7 +225,6 @@ class BadgrBackend(BadgeBackend):
         response = requests.post(
             self._assertions_url(settings.BADGR_ISSUER_SLUG), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT
         )
-        # LOGGER.info('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
 
         self._log_if_raised(response, data)
         assertion, __ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
