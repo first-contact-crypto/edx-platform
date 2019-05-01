@@ -150,16 +150,13 @@ class BadgrBackend(BadgeBackend):
                 u"Filename was: {}".format(image.name)
             )
         files = {'image': (image.name, image, content_type)}
-        # data = {
-        #     'name': badge_class.display_name,
-        #     'criteria': badge_class.criteria,
-        #     'slug': self._slugify(badge_class),
-        #     'description': badge_class.description,
-        # }
         data = {
             'name': badge_class.display_name,
-            'description': badge_class.description
+            'criteria': badge_class.criteria,
+            'slug': self._slugify(badge_class),
+            'description': badge_class.description,
         }
+
 
         result = requests.post(
             self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
