@@ -166,18 +166,26 @@ class BadgrBackend(BadgeBackend):
         #     self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
         #     timeout=settings.BADGR_TIMEOUT
         # )
+
         result = requests.post(
             self._badgeclasses_url(), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
+
+
         self._log_if_raised(result, data)
+
         try:
             result_json = result.json()
-            LOGGER.info("BADGE_CLASS: Here is the response json: {}".format(result_json))
             if 'slug' in result_json:
+                LOGGER.info("BADGE_CLASS: Here is the response json: {}".format(result_json))
                 badgr_server_slug = result_json['slug']
                 badge_class.badgr_server_slug = badgr_server_slug
                 badge_class.save()
+            else:
+                LOGGER.info("BADGE_CLASS: ERROR: there is no 'slug' in response json: {}".format(result_json))
         except Exception as excep:
             LOGGER.error('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
+
+
 
     def _send_assertion_created_event(self, user, assertion):
         """
