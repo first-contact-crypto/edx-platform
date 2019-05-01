@@ -149,18 +149,18 @@ class BadgrBackend(BadgeBackend):
                 u"Could not determine content-type of image! Make sure it is a properly named .png file. "
                 u"Filename was: {}".format(image.name)
             )
-        # files = {'image': (image.name, image, content_type)}
-        # data = {
-        #     'name': badge_class.display_name,
-        #     'criteria': badge_class.criteria,
-        #     'slug': self._slugify(badge_class),
-        #     'description': badge_class.description,
-        # }
-
+        files = {'image': (image.name, image, content_type)}
         data = {
-            'name': badge_class.slug,
-            'description': badge_class.description
+            'name': badge_class.display_name,
+            'criteria': badge_class.criteria,
+            'slug': self._slugify(badge_class),
+            'description': badge_class.description,
         }
+
+        # data = {
+        #     'name': badge_class.slug,
+        #     'description': badge_class.description
+        # }
         LOGGER.info("BADGE_APP.. The url is: {} , The headers are: {} , The data is {}".format(self._badgeclasses_url(), self._get_headers(), data))
         # result = requests.post(
         #     self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
@@ -168,7 +168,7 @@ class BadgrBackend(BadgeBackend):
         # )
 
         result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
+            self._badgeclasses_url(), headers=self._get_headers(), json=data, files=files, timeout=settings.BADGR_TIMEOUT)
 
 
         self._log_if_raised(result, data)
