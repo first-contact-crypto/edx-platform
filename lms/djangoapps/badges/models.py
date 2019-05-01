@@ -1,6 +1,7 @@
 """
 Database models for the badges app
 """
+import logging
 from importlib import import_module
 
 from config_models.models import ConfigurationModel
@@ -19,6 +20,8 @@ from opaque_keys.edx.keys import CourseKey
 from badges.utils import deserialize_count_specs
 from xmodule.modulestore.django import modulestore
 
+
+LOGGER = logging.getLogger(__name__)
 
 def validate_badge_image(image):
     """
@@ -78,6 +81,7 @@ class BadgeClass(models.Model):
         and it will 'do the right thing'. It should be the exception, rather than the common case, that a badge class
         would need to be looked up without also being created were it missing.
         """
+        LOGGER.info("BADGES_APP.. In get_badge_class..")
         # slug = slug.lower()
         # issuing_component = issuing_component.lower()
         if course_id and not modulestore().get_course(course_id).issue_badges:
