@@ -108,6 +108,8 @@ class BadgrBackend(BadgeBackend):
         """
         Get a compatible badge slug from the specification.
         """
+        LOGGER.info("BADGE_CLASS: In _slugify NOW!")
+
         slug = badge_class.issuing_component + badge_class.slug
         if badge_class.issuing_component and badge_class.course_id:
             # Make this unique to the course, and down to 64 characters.
@@ -122,7 +124,7 @@ class BadgrBackend(BadgeBackend):
         """
         Log server response if there was an error.
         """
-        LOGGER.info("RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
+        LOGGER.info("BADGE_CLASS: In _log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
         try:
             response.raise_for_status()
         except HTTPError:
@@ -140,6 +142,7 @@ class BadgrBackend(BadgeBackend):
         """
         Create the badge class on Badgr.
         """
+        LOGGER.info("BADGE_CLASS: In _create_badge NOW!")
         image = badge_class.image
         # We don't want to bother validating the file any further than making sure we can detect its MIME type,
         # for HTTP. The Badgr-Server should tell us if there's anything in particular wrong with it.
@@ -150,10 +153,15 @@ class BadgrBackend(BadgeBackend):
                 u"Filename was: {}".format(image.name)
             )
         files = {'image': (image.name, image, content_type)}
+        slug = None
+        if badge_class.slug != None:
+            slug = badge_class
+        else:
+            slug = self._slugify(badge_class)
         data = {
             'name': badge_class.display_name,
             'criteria': badge_class.criteria,
-            'slug': self._slugify(badge_class),
+            'slug': slug,
             'description': badge_class.description,
         }
 
@@ -194,6 +202,8 @@ class BadgrBackend(BadgeBackend):
         """
         Send an analytics event to record the creation of a badge assertion.
         """
+        LOGGER.info("BADGE_CLASS: In _send_assertion_created_event NOW!")
+
         tracker.emit(
             'edx.badge.assertion.created', {
                 'user_id': user.id,
@@ -214,6 +224,8 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
+        LOGGER.info("BADGE_CLASS: In _create_assertion NOW!")
+
         # data = {
         #     'email': user.email,
         #     'evidence': evidence_url,
@@ -284,6 +296,7 @@ class BadgrBackend(BadgeBackend):
             return
         response = requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
         if response.status_code != 200:
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling _create_badge NOW!")
             self._create_badge(badge_class)
         BadgrBackend.badges.append(slug)
 
@@ -291,5 +304,7 @@ class BadgrBackend(BadgeBackend):
         """
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
+        LOGGER.info("BADGE_CLASS: In _award NOW!")
+
         self._ensure_badge_created(badge_class)
         return self._create_assertion(badge_class, user, evidence_url)
