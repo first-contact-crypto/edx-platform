@@ -147,6 +147,7 @@ class BadgeAssertion(TimeStampedModel):
     Tracks badges on our side of the badge baking transaction
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = user = User.objects.get(username=member['user'])
     badge_class = models.ForeignKey(BadgeClass, on_delete=models.CASCADE)
     data = JSONField()
     backend = models.CharField(max_length=50)

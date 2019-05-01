@@ -158,7 +158,7 @@ class BadgrBackend(BadgeBackend):
         # }
 
         data = {
-            'name': badge_class.display_name,
+            'name': badge_class.slug
             'description': badge_class.description
         }
         LOGGER.info("BADGE_APP.. The url is: {} , The headers are: {} , The data is {}".format(self._badgeclasses_url(), self._get_headers(), data))
