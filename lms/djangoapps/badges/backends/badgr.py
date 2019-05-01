@@ -172,9 +172,12 @@ class BadgrBackend(BadgeBackend):
 
 
         self._log_if_raised(result, data)
+        
+        result_json = result.json()
+        LOGGER.info("BADGE_CLASS: In _create_badge() ..Here is the result_json: {}".format(result_json))
 
         try:
-            result_json = result.json()
+            result_json != None 
             if 'slug' in result_json:
                 LOGGER.info("BADGE_CLASS: Here is the response json: {}".format(result_json))
                 badgr_server_slug = result_json['slug']
