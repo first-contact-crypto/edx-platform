@@ -149,24 +149,24 @@ class BadgrBackend(BadgeBackend):
                 u"Could not determine content-type of image! Make sure it is a properly named .png file. "
                 u"Filename was: {}".format(image.name)
             )
-        # files = {'image': (image.name, image, content_type)}
-        # data = {
-        #     'name': badge_class.display_name,
-        #     'criteria': badge_class.criteria,
-        #     'slug': self._slugify(badge_class),
-        #     'description': badge_class.description,
-        # }
-
+        files = {'image': (image.name, image, content_type)}
         data = {
             'name': badge_class.display_name,
+            'criteria': badge_class.criteria,
+            'slug': self._slugify(badge_class),
             'description': badge_class.description,
         }
-        # result = requests.post(
-        #     self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
-        #     timeout=settings.BADGR_TIMEOUT
-        # )
+
+        # data = {
+        #     'name': badge_class.display_name,
+        #     'description': badge_class.description,
+        # }
         result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT)
+            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
+            timeout=settings.BADGR_TIMEOUT
+        )
+        result = requests.post(
+            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files, timeout=settings.BADGR_TIMEOUT)
         self._log_if_raised(result, data)
         try:
             result_json = result.json()
