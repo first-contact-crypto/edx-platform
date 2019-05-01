@@ -293,11 +293,15 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created the badge_class.badgr_server_slug is: {}".format(slug))
 
         if slug in BadgrBackend.badges:
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The slug IS in BadgrBackend.badges.. LEAVING _ensure_badge_created")
             return
+
         response = requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
         if response.status_code != 200:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling _create_badge NOW!")
             self._create_badge(badge_class)
+        
+        LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
         BadgrBackend.badges.append(slug)
 
     def award(self, badge_class, user, evidence_url=None):
