@@ -158,7 +158,7 @@ class BadgrBackend(BadgeBackend):
         # }
 
         data = {
-            'name': badge_class.slug
+            'name': badge_class.slug,
             'description': badge_class.description
         }
         LOGGER.info("BADGE_APP.. The url is: {} , The headers are: {} , The data is {}".format(self._badgeclasses_url(), self._get_headers(), data))
@@ -223,7 +223,7 @@ class BadgrBackend(BadgeBackend):
                 'hashed': False,
                 'plaintextIdentity': 'johndoe'
             },
-            'badgeclass': badge_class.slug 
+            'badgeclass': badge_class.slug
         }
 
         response = requests.post(
@@ -242,7 +242,6 @@ class BadgrBackend(BadgeBackend):
         #     assertion = BadgeAssertion(user=user, badge_class=badge_class)
         #     assertion.save()
 
-
         assertion.data = response.json()
         assertion.backend = 'BadgrBackend'
         assertion.image_url = assertion.data['image']
@@ -250,7 +249,6 @@ class BadgrBackend(BadgeBackend):
         assertion.save()
         self._send_assertion_created_event(user, assertion)
         return assertion
-
 
     @staticmethod
     def _get_headers():
