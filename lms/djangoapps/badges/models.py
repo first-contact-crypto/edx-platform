@@ -132,8 +132,8 @@ class BadgeClass(models.Model):
         """
         Slugs must always be lowercase.
         """
-        # self.slug = self.slug and self.slug.lower()
-        # self.issuing_component = self.issuing_component and self.issuing_component.lower()
+        self.slug = self.slug and self.slug.lower()
+        self.issuing_component = self.issuing_component and self.issuing_component.lower()
         super(BadgeClass, self).save(**kwargs)
 
     class Meta(object):

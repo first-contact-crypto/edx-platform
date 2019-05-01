@@ -289,6 +289,8 @@ class BadgrBackend(BadgeBackend):
         """
         Verify a badge has been created for this badge class, and create it if not.
         """
+        LOGGER.info("BADGE_CLASS: In _ensure_badge_created NOW!")
+
         slug = badge_class.badgr_server_slug
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created the badge_class.badgr_server_slug is: {}".format(slug))
 
@@ -297,9 +299,14 @@ class BadgrBackend(BadgeBackend):
             return
 
         response = requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
+        status_code = response.status_code
+        LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..the status code from 'get badgr server badgeclasesses' is: {}".format(status_code))
+
         if response.status_code != 200:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling _create_badge NOW!")
             self._create_badge(badge_class)
+        else:
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE RESPONSE STATUS CODE FROM BADGR SERVER IS BAD: {}".format(status_code))
         
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
         BadgrBackend.badges.append(slug)
