@@ -302,7 +302,7 @@ class BadgrBackend(BadgeBackend):
         status_code = response.status_code
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..the status code from 'get badgr server badgeclasesses' is: {}".format(status_code))
 
-        if response.status_code != 200:
+        if response.status_code == 200:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling _create_badge NOW!")
             self._create_badge(badge_class)
         else:
