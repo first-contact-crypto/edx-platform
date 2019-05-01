@@ -167,7 +167,7 @@ class BadgrBackend(BadgeBackend):
         #     timeout=settings.BADGR_TIMEOUT
         # )
         result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT)
+            self._badgeclasses_url(), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
         self._log_if_raised(result, data)
         try:
             result_json = result.json()
