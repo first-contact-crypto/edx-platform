@@ -174,12 +174,12 @@ class BadgrBackend(BadgeBackend):
         self._log_if_raised(result, data)
         
         result_json = result.json()
-        LOGGER.info("BADGE_CLASS: In _create_badge() ..Here is the result_json: {}".format(result_json))
+        LOGGER.info("BADGE_CLASS: In _create_badge() ..Here is the badgrserver after creating badge: {}".format(result_json))
 
         try:
             result_json != None 
             if 'slug' in result_json:
-                LOGGER.info("BADGE_CLASS: Here is the response json: {}".format(result_json))
+                LOGGER.info("BADGE_CLASS:  In _create_badge() ..Here is the response json: {}".format(result_json))
                 badgr_server_slug = result_json['slug']
                 badge_class.badgr_server_slug = badgr_server_slug
                 badge_class.save()
@@ -278,6 +278,8 @@ class BadgrBackend(BadgeBackend):
         Verify a badge has been created for this badge class, and create it if not.
         """
         slug = badge_class.badgr_server_slug
+        LOGGER.info("BADGE_CLASS: In _ensure_badge_created the badge_class.badgr_server_slug is: {}".format(slug))
+
         if slug in BadgrBackend.badges:
             return
         response = requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
