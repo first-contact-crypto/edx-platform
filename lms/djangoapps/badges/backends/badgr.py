@@ -171,6 +171,7 @@ class BadgrBackend(BadgeBackend):
         self._log_if_raised(result, data)
         try:
             result_json = result.json()
+            LOGGER.info("BADGE_CLASS: Here is the response json: {}".format(result_json))
             if 'slug' in result_json:
                 badgr_server_slug = result_json['slug']
                 badge_class.badgr_server_slug = badgr_server_slug
@@ -226,8 +227,12 @@ class BadgrBackend(BadgeBackend):
             'badgeclass': badge_class.slug
         }
 
+        server_slug = badge_class.badgr_server_slug
+
+        LOGGER.info("BADGE_CLASS: Sending the badgr_server_slug: {}".format(server_slug))
+
         response = requests.post(
-            self._assertions_url(badge_class.badgr_server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
+            self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
         )
         self._log_if_raised(response, data)
 
