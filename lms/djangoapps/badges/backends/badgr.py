@@ -158,6 +158,8 @@ class BadgrBackend(BadgeBackend):
             slug = badge_class
         else:
             slug = self._slugify(badge_class)
+
+            
         data = {
             'name': badge_class.display_name,
             'criteria': badge_class.criteria,
@@ -176,7 +178,7 @@ class BadgrBackend(BadgeBackend):
         # )
 
         result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), json=data, files=files, timeout=settings.BADGR_TIMEOUT)
+            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files, timeout=settings.BADGR_TIMEOUT)
 
 
         self._log_if_raised(result, data)
