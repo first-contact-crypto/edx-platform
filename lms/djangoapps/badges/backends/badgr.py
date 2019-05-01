@@ -159,13 +159,13 @@ class BadgrBackend(BadgeBackend):
 
         data = {
             'name': badge_class.display_name,
-            'description': badge_class.description,
+            'description': badge_class.description
         }
         LOGGER.info("BADGE_APP.. The url is: {} , The headers are: {} , The data is {}".format(self._badgeclasses_url(), self._get_headers(), data)
-        result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
-            timeout=settings.BADGR_TIMEOUT
-        )
+        # result = requests.post(
+        #     self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
+        #     timeout=settings.BADGR_TIMEOUT
+        # )
         result = requests.post(
             self._badgeclasses_url(), headers=self._get_headers(), data=data, timeout=settings.BADGR_TIMEOUT)
         self._log_if_raised(result, data)
