@@ -126,7 +126,7 @@ class BadgeClass(models.Model):
         """
         Contacts the backend to have a badge assertion created for this badge class for this user.
         """
-        return self.backend.award(self, user, evidence_url=evidence_url)
+        return self.backend.award(self, user)
 
     def save(self, **kwargs):
         """
