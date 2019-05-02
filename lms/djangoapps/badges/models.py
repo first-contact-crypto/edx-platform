@@ -136,7 +136,7 @@ class BadgeClass(models.Model):
         self.issuing_component = self.issuing_component and self.issuing_component.lower()
         super(BadgeClass, self).save(**kwargs)
 
-    def assertions_for_user(user):
+    def assertions_for_user(self, user):
         return BadgeAssertion.assertions_for_user(user)
 
     class Meta(object):
