@@ -236,10 +236,10 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
         data = {
             'recipient': {
-                'identity': 'johndoe@firstcontactcrypto.com',
+                'identity': user.email,
                 'type': 'email',
                 'hashed': False,
-                'plaintextIdentity': 'johndoe'
+                'plaintextIdentity': 
             }
         }
 
@@ -253,6 +253,7 @@ class BadgrBackend(BadgeBackend):
         self._log_if_raised(response, data)
 
         # assertion, _ = BadgeAssertion.objects.get_or_create(user=user)
+        LOGGER.info("IS USER AN OBJECT OR FUCKING WHAT? .. {}".format(type(user)))
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
 
         assertion.badge_class = badge_class
