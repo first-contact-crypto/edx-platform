@@ -256,7 +256,11 @@ class BadgrBackend(BadgeBackend):
         # assertion, _ = BadgeAssertion.objects.get_or_create(user=user)
 
         LOGGER.info("IS USER AN OBJECT OR FUCKING WHAT? .. {}".format(type(user)))
-        assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
+
+
+        # assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
+        assertion = BadgeAssertion(user=user, badge_class=badge_class)
+
 
         assertion.badge_class = badge_class
 
