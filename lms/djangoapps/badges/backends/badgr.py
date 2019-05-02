@@ -218,7 +218,7 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
-        LOGGER.info("BADGE_CLASS: In _create_assertion NOW!")
+        LOGGER.info("BADGE_CLASS: In _create_assertion NOW! the user type is: {}".format(user))
 
         # data = {
         #     'email': user.email,
@@ -254,7 +254,9 @@ class BadgrBackend(BadgeBackend):
         self._log_if_raised(response, data)
 
         # assertion, _ = BadgeAssertion.objects.get_or_create(user=user)
+
         LOGGER.info("IS USER AN OBJECT OR FUCKING WHAT? .. {}".format(type(user)))
+
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
 
         assertion.badge_class = badge_class
@@ -310,7 +312,7 @@ class BadgrBackend(BadgeBackend):
         """
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
-        LOGGER.info("BADGE_CLASS: In _award NOW!")
+        LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(user))
 
         self._ensure_badge_created(badge_class)
         return self._create_assertion(badge_class, user, evidence_url)
