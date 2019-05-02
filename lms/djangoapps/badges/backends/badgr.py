@@ -154,17 +154,10 @@ class BadgrBackend(BadgeBackend):
                 u"Filename was: {}".format(image.name)
             )
         files = {'image': (image.name, image, content_type)}
-        slug = None
-        if badge_class.slug != None:
-            slug = badge_class
-        else:
-            slug = self._slugify(badge_class)
-
 
         data = {
             'name': badge_class.display_name,
             'criteria': badge_class.criteria,
-            'slug': slug,
             'description': badge_class.description,
         }
 
@@ -184,8 +177,8 @@ class BadgrBackend(BadgeBackend):
 
         self._log_if_raised(result, data)
         
-        result_json = json.loads(result.json())
-        LOGGER.info("BADGE_CLASS: In _create_badge() ..Here is the badgrserver after creating badge: {}".format(result_json))
+        result_json = result.json()
+        LOGGER.info("BADGE_CLASS: In _create_badge() (TYPE OF result.json(): {})..Here is the badgrserver after creating badge: {}".format(type(result_json), result_json))
         LOGGER.info("BADGE_CLASS: In _create_badge() ..The result_json keys are: {}".format(result_json.keys()))
 
         # try:
