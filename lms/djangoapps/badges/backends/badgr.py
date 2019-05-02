@@ -256,11 +256,11 @@ class BadgrBackend(BadgeBackend):
         # assertion, _ = BadgeAssertion.objects.get_or_create(user=user)
 
         LOGGER.info("IS USER AN OBJECT OR FUCKING WHAT? .. {}".format(type(user)))
+        LOGGER.info("BADGE_CLASS: In _create_assertion.. the response data is: {}".format(response.json()))
 
+        assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
 
-        # assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
-        assertion = BadgeAssertion.objects.create(user=user, badge_class=badge_class)
-
+        LOGGER.info("BADGE_CLASS: In _createAssertion.. the assertion type is: {}".format(type(assertion)))
 
         assertion.badge_class = badge_class
 
@@ -272,8 +272,8 @@ class BadgrBackend(BadgeBackend):
 
         assertion.data = response.json()
         assertion.backend = 'BadgrBackend'
-        assertion.image_url = assertion.data['image']
-        assertion.assertion_url = assertion.data['json']['id']
+        assertion.image_url = 'https//firstcontactcrypto.com/static/img/logo.png'
+        assertion.assertion_url = 'https://firstcontactcrypto.com/assertion'
         assertion.save()
         return assertion
 
