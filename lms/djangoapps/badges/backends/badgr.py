@@ -234,14 +234,14 @@ class BadgrBackend(BadgeBackend):
         #         'narrative': "You need to pass"
         #     },
         LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
-        
+
         data = {
             'recipient': {
-                'identity': user.email,
+                'identity': 'johndoe@firstcontactcrypto.com',
                 'type': 'email',
                 'hashed': False,
-                'plaintextIdentity': 'johndoe',
-            },
+                'plaintextIdentity': 'johndoe'
+            }
         }
 
         server_slug = badge_class.badgr_server_slug
