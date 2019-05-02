@@ -233,7 +233,7 @@ class BadgrBackend(BadgeBackend):
         #         'url': evidence_url,
         #         'narrative': "You need to pass"
         #     },
-        LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
+        # LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
 
         data = {
             'recipient': {
