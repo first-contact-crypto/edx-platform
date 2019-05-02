@@ -218,7 +218,7 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
-        LOGGER.info("BADGE_CLASS: In _create_assertion NOW! the user type is: {}".format(user))
+        LOGGER.info("BADGE_CLASS: In _create_assertion NOW! the user type is: {}".format(type(user)))
 
         # data = {
         #     'email': user.email,
@@ -272,7 +272,6 @@ class BadgrBackend(BadgeBackend):
         assertion.image_url = assertion.data['image']
         assertion.assertion_url = assertion.data['json']['id']
         assertion.save()
-        self._send_assertion_created_event(user, assertion)
         return assertion
 
     @staticmethod
@@ -312,7 +311,7 @@ class BadgrBackend(BadgeBackend):
         """
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
-        LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(user))
+        LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(type(user))
 
         self._ensure_badge_created(badge_class)
         return self._create_assertion(badge_class, user, evidence_url)
