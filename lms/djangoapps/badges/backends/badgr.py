@@ -311,11 +311,11 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
         BadgrBackend.badges.append(slug)
 
-    def award(self, badge_class=None, user=None, evidence_url=None):
+    def award(self, badge_class=None, user=None):
         """
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
         LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(type(user)))
 
         self._ensure_badge_created(badge_class)
-        return self._create_assertion(badge_class, user, evidence_url)
+        return self._create_assertion(badge_class, user, None)
