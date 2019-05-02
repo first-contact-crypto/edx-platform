@@ -136,8 +136,8 @@ class BadgeClass(models.Model):
         self.issuing_component = self.issuing_component and self.issuing_component.lower()
         super(BadgeClass, self).save(**kwargs)
 
-    def assertions_for_user(user, course_id=None):
-        return BadgeAssertion.assertions_for_user(user, course_id)
+    def assertions_for_user(user):
+        return BadgeAssertion.assertions_for_user(user)
 
     class Meta(object):
         app_label = "badges"
@@ -164,10 +164,11 @@ class BadgeAssertion(TimeStampedModel):
         )
 
     @classmethod
-    def assertions_for_user(cls, user, course_id=None):
+    def assertions_for_user(cls, user):
         """
         Get all assertions for a user, optionally constrained to a course.
         """
+        LOGGER.info("BADGE_CLASS: In assertions_for_user.. the user type is: {}".format(type(user)))
         # if course_id:
         #     return cls.objects.filter(user=user, course_id=course_id)
         return cls.objects.filter(user=user)
