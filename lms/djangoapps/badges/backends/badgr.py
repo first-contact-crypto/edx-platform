@@ -277,6 +277,7 @@ class BadgrBackend(BadgeBackend):
         assertion.save()
         return assertion
 
+
     @staticmethod
     def _get_headers():
         """
@@ -310,7 +311,7 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
         BadgrBackend.badges.append(slug)
 
-    def award(self, badge_class, user, evidence_url=None):
+    def award(self, badge_class=None, user=None, evidence_url=None):
         """
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
