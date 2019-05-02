@@ -240,8 +240,7 @@ class BadgrBackend(BadgeBackend):
                 'type': 'email',
                 'hashed': False,
                 'plaintextIdentity': 'johndoe'
-            },
-            'badgeclass': badge_class.slug
+            }
         }
 
         server_slug = badge_class.badgr_server_slug
