@@ -159,7 +159,7 @@ class BadgrBackend(BadgeBackend):
         else:
             slug = self._slugify(badge_class)
 
-            
+
         data = {
             'name': badge_class.display_name,
             'criteria': badge_class.criteria,
@@ -190,7 +190,7 @@ class BadgrBackend(BadgeBackend):
             result_json != None 
             if 'slug' in result_json:
                 LOGGER.info("BADGE_CLASS:  In _create_badge() ..Here is the response json: {}".format(result_json))
-                badgr_server_slug = result_json['slug']
+                badgr_server_slug = result_json['entityId']
                 badge_class.badgr_server_slug = badgr_server_slug
                 badge_class.save()
             else:
