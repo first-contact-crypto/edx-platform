@@ -189,9 +189,10 @@ class BadgrBackend(BadgeBackend):
         try:
             if 'entityId' in result_json:
                 LOGGER.info("BADGE_CLASS:  In _create_badge() ..Here is the response json: {}".format(result_json))
-                badgr_server_slug = result_json['entityId']
-                badge_class.badgr_server_slug = badgr_server_slug
+                badge_class.badgr_server_slug = result_json['entityId']
                 badge_class.save()
+            else:
+                LOGGER.info("BADGE_CLASS: In _create_badge() ..What happend? THIS IS WRONG!!!")
         except Exception as excep:
             LOGGER.error('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
 
