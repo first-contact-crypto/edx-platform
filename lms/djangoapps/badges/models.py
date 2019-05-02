@@ -136,6 +136,9 @@ class BadgeClass(models.Model):
         self.issuing_component = self.issuing_component and self.issuing_component.lower()
         super(BadgeClass, self).save(**kwargs)
 
+    def assertions_for_user(user, course_id=None):
+        return BadgeAssertion.assertions_for_user(user, course_id)
+
     class Meta(object):
         app_label = "badges"
         unique_together = (('slug', 'issuing_component', 'course_id'),)
