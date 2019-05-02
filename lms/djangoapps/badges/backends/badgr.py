@@ -256,7 +256,6 @@ class BadgrBackend(BadgeBackend):
         # assertion, _ = BadgeAssertion.objects.get_or_create(user=user)
 
         LOGGER.info("IS USER AN OBJECT OR FUCKING WHAT? .. {}".format(type(user)))
-
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
 
         assertion.badge_class = badge_class
@@ -311,7 +310,7 @@ class BadgrBackend(BadgeBackend):
         """
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
-        LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(type(user))
+        LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(type(user)))
 
         self._ensure_badge_created(badge_class)
         return self._create_assertion(badge_class, user, evidence_url)
