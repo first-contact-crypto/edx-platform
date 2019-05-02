@@ -4,6 +4,7 @@ Badge Awarding backend for Badgr-Server.
 import hashlib
 import logging
 import mimetypes
+import json
 
 import requests
 from django.conf import settings
@@ -183,12 +184,12 @@ class BadgrBackend(BadgeBackend):
 
         self._log_if_raised(result, data)
         
-        result_json = result.json()
+        result_json = json.loads(result.json())
         LOGGER.info("BADGE_CLASS: In _create_badge() ..Here is the badgrserver after creating badge: {}".format(result_json))
+        LOGGER.info("BADGE_CLASS: In _create_badge() ..The result_json keys are: {}".format(result_json.keys()))
 
         # try:
         #     if 'entityId' in result_json:
-        LOGGER.info("BADGE_CLASS:  In _create_badge() ..Here is the response json: {}".format(result_json))
         badge_class.badgr_server_slug = result_json['entityId']
         badge_class.save()
         #     else:
