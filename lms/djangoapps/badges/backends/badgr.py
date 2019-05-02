@@ -183,7 +183,7 @@ class BadgrBackend(BadgeBackend):
 
         # try:
         #     if 'entityId' in result_json:
-        badge_class.badgr_server_slug = result_json['result']['entityId']
+        badge_class.badgr_server_slug = result_json['result'][0]['entityId']
         badge_class.save()
         #     else:
         #         LOGGER.info("BADGE_CLASS: In _create_badge() ..What happend? THIS IS WRONG!!!")
