@@ -168,8 +168,8 @@ class BadgeAssertion(TimeStampedModel):
         """
         Get all assertions for a user, optionally constrained to a course.
         """
-        if course_id:
-            return cls.objects.filter(user=user, course_id=course_id)
+        # if course_id:
+        #     return cls.objects.filter(user=user, course_id=course_id)
         return cls.objects.filter(user=user)
 
     class Meta(object):
