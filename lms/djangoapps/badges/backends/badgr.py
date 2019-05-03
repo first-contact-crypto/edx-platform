@@ -218,23 +218,6 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
-        LOGGER.info("BADGE_CLASS: In _create_assertion NOW! the user type is: {}".format(type(user)))
-
-        # data = {
-        #     'email': user.email,
-        #     'evidence': evidence_url,
-        # }
-        LOGGER.info("CREATE ASSERTION.. the badge_class.slug is: {}".format(badge_class.slug))
-        # LOGGER.info("CREATE ASSERTION.. the badge_class.badgeclass_slug is {}".format(badge_class.badgeclass_slug))
-        LOGGER.info("CREATE ASSERTION.. the badge_class.badgr_server_slug is: {}".format(badge_class.badgr_server_slug))
-        # data = {
-        #     'issuer': settings.BADGR_ISSUER_SLUG,
-        #     'evidence': {
-        #         'url': evidence_url,
-        #         'narrative': "You need to pass"
-        #     },
-        # LOGGER.info("CREATE ASSERTION.. user id: {}".format(user.id))
-
         data = {
             'recipient': {
                 'identity': 'johndoe@firstcontactcrypto.com',
@@ -246,29 +229,16 @@ class BadgrBackend(BadgeBackend):
 
         server_slug = badge_class.badgr_server_slug
 
-        LOGGER.info("BADGE_CLASS: Sending the badgr_server_slug: {}".format(server_slug))
-
         response = requests.post(
             self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
         )
         self._log_if_raised(response, data)
 
-        # assertion, _ = BadgeAssertion.objects.get_or_create(user=user)
-
-        LOGGER.info("IS USER AN OBJECT OR FUCKING WHAT? .. {}".format(type(user)))
-        LOGGER.info("BADGE_CLASS: In _create_assertion.. the response data is: {}".format(response.json()))
-
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
-
-        LOGGER.info("BADGE_CLASS: In _createAssertion.. the assertion type is: {}".format(type(assertion)))
 
         assertion.badge_class = badge_class
 
-        # try:
-        #     assertion = BadgeAssertion.objects.get(user=user, badge_class=badge_class)
-        # except BadgeAssertion.DoesNotExist:
-        #     assertion = BadgeAssertion(user=user, badge_class=badge_class)
-        #     assertion.save()
+        LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.image.url)
 
         assertion.data = response.json()
         assertion.backend = 'BadgrBackend'
