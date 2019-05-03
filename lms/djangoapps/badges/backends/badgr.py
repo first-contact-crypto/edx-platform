@@ -272,7 +272,7 @@ class BadgrBackend(BadgeBackend):
 
         assertion.data = response.json()
         assertion.backend = 'BadgrBackend'
-        assertion.image_url = 'https//firstcontactcrypto.com/static/img/logo.png'
+        assertion.image_url = badge_class.image.url
         assertion.assertion_url = 'https://firstcontactcrypto.com/assertion'
         assertion.save()
         return assertion
