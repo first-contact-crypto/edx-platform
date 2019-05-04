@@ -30,10 +30,11 @@ def validate_badge_image(image):
     """
     Validates that a particular image is small enough to be a badge and square.
     """
-    if image.width != image.height:
-        raise ValidationError(_(u"The badge image must be square."))
-    if not image.size < (250 * 1024):
-        raise ValidationError(_(u"The badge image file size must be less than 250KB."))
+    # if image.width != image.height:
+    #     raise ValidationError(_(u"The badge image must be square."))
+    # if not image.size < (250 * 1024):
+    #     raise ValidationError(_(u"The badge image file size must be less than 250KB."))
+    pass
 
 
 def validate_lowercase(string):
