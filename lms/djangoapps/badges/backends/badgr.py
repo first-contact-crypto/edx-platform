@@ -227,6 +227,8 @@ class BadgrBackend(BadgeBackend):
             }
         }
 
+        # Damn it man!
+
         server_slug = badge_class.badgr_server_slug
 
         response = requests.post(
