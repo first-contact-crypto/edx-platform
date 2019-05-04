@@ -285,7 +285,6 @@ class BadgrBackend(BadgeBackend):
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
 
-        # useless comment
 
         LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(type(u)))
 
