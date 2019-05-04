@@ -20,6 +20,10 @@ from opaque_keys.edx.keys import CourseKey
 from badges.utils import deserialize_count_specs
 from xmodule.modulestore.django import modulestore
 
+# Mine
+from django.core.files import File
+from urllib.request import urlopen
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -60,8 +64,7 @@ class BadgeClass(models.Model):
     criteria = models.TextField()
     # Mode a badge was awarded for. Included for legacy/migration purposes.
     mode = models.CharField(max_length=100, default='', blank=True)
-    # image = models.ImageField(upload_to='im', validators=[validate_badge_image])
-    img_url = models.URLField()
+    image = models.ImageField(upload_to='badge_classes', validators=[validate_badge_image])
 
     def __unicode__(self):
         return u"<Badge '{slug}' for '{issuing_component}'>".format(
@@ -70,7 +73,7 @@ class BadgeClass(models.Model):
 
     @classmethod
     def get_badge_class(
-            cls, slug, issuing_component, display_name=None, description=None, criteria=None, img_url=None,
+            cls, slug, issuing_component, display_name=None, description=None, criteria=None, image=None,
             mode='', course_id=None, create=True
     ):
         """
@@ -102,11 +105,16 @@ class BadgeClass(models.Model):
             mode=mode,
             description=description,
             criteria=criteria,
-            img_url=img_url
+            image=image
         )
         badge_class.full_clean()
         badge_class.save()
         return badge_class
+
+
+    def save(self, *args, **kwargs):
+        if not self.image:
+            img_tmp = Name
 
     @lazy
     def backend(self):
