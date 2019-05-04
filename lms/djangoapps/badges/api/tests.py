@@ -41,7 +41,7 @@ class UserAssertionTestCase(UrlResetMixin, ModuleStoreTestCase, ApiTestCase):
         """
         self.assertEqual(badge_class.issuing_component, json_class['issuing_component'])
         self.assertEqual(badge_class.slug, json_class['slug'])
-        self.assertIn(badge_class.image.url, json_class['image_url'])
+        self.assertIn(badge_class.img_url, json_class['image_url'])
         self.assertEqual(badge_class.description, json_class['description'])
         self.assertEqual(badge_class.criteria, json_class['criteria'])
         self.assertEqual(badge_class.course_id and unicode(badge_class.course_id), json_class['course_id'])

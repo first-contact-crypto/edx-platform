@@ -60,7 +60,8 @@ class BadgeClass(models.Model):
     criteria = models.TextField()
     # Mode a badge was awarded for. Included for legacy/migration purposes.
     mode = models.CharField(max_length=100, default='', blank=True)
-    image = models.ImageField(upload_to='img', validators=[validate_badge_image])
+    # image = models.ImageField(upload_to='im', validators=[validate_badge_image])
+    img_url = models.URLField()
 
     def __unicode__(self):
         return u"<Badge '{slug}' for '{issuing_component}'>".format(
@@ -69,7 +70,7 @@ class BadgeClass(models.Model):
 
     @classmethod
     def get_badge_class(
-            cls, slug, issuing_component, display_name=None, description=None, criteria=None, image_file_handle=None,
+            cls, slug, issuing_component, display_name=None, description=None, criteria=None, img_url=None,
             mode='', course_id=None, create=True
     ):
         """
@@ -101,9 +102,9 @@ class BadgeClass(models.Model):
             mode=mode,
             description=description,
             criteria=criteria,
+            img_url=img_url
         )
-        badge_class.image.save(image_file_handle.name, image_file_handle)
-        # badge_class.full_clean()
+        badge_class.full_clean()
         badge_class.save()
         return badge_class
 

@@ -174,9 +174,8 @@ class BadgrBackend(BadgeBackend):
         result = requests.post(
             self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files, timeout=settings.BADGR_TIMEOUT)
 
-
         self._log_if_raised(result, data)
-        
+
         result_json = result.json()
         LOGGER.info("BADGE_CLASS: In _create_badge() (TYPE OF result.json(): {})..Here is the badgrserver after creating badge: {}".format(type(result_json), result_json))
         LOGGER.info("BADGE_CLASS: In _create_badge() ..The result_json keys are: {}".format(result_json.keys()))
@@ -189,8 +188,6 @@ class BadgrBackend(BadgeBackend):
         #         LOGGER.info("BADGE_CLASS: In _create_badge() ..What happend? THIS IS WRONG!!!")
         # except Exception as excep:
         #     LOGGER.error('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
-
-
 
     def _send_assertion_created_event(self, user, assertion):
         """
@@ -240,12 +237,12 @@ class BadgrBackend(BadgeBackend):
 
         assertion.badge_class = badge_class
 
-        LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.image.url)
+        LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url)
 
-        assertion.data = response.json()
-        assertion.backend = 'BadgrBackend'
-        assertion.image_url = badge_class.image.url
-        assertion.assertion_url = 'https://firstcontactcrypto.com/assertion'
+        assertion.data=response.json()
+        assertion.backend='BadgrBackend'
+        assertion.image_url=badge_class.img_url
+        assertion.assertion_url='https://firstcontactcrypto.com/assertion'
         assertion.save()
         return assertion
 
@@ -263,15 +260,15 @@ class BadgrBackend(BadgeBackend):
         """
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created NOW!")
 
-        slug = badge_class.badgr_server_slug
+        slug=badge_class.badgr_server_slug
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created the badge_class.badgr_server_slug is: {}".format(slug))
 
         if slug in BadgrBackend.badges:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The slug IS in BadgrBackend.badges.. LEAVING _ensure_badge_created")
             return
 
-        response = requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
-        status_code = response.status_code
+        response=requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
+        status_code=response.status_code
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..the status code from 'get badgr server badgeclasesses' is: {}".format(status_code))
 
         if response.status_code == 200:
@@ -279,7 +276,7 @@ class BadgrBackend(BadgeBackend):
             self._create_badge(badge_class)
         else:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE RESPONSE STATUS CODE FROM BADGR SERVER IS BAD: {}".format(status_code))
-        
+
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
         BadgrBackend.badges.append(slug)
 
