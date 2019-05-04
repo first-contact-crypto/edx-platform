@@ -182,7 +182,9 @@ class BadgrBackend(BadgeBackend):
 
         # try:
         #     if 'entityId' in result_json:
-        badge_class.badgr_server_slug = result_json['result'][0]['entityId']
+        server_slug = result_json['result'][0]['entityId']
+        LOGGER.info("BADGE_CLASS: In _create_badge.. the server_slug is: {}".format(server_slug))
+        badge_class.badgr_server_slug = server_slug
         badge_class.save()
         #     else:
         #         LOGGER.info("BADGE_CLASS: In _create_badge() ..What happend? THIS IS WRONG!!!")
@@ -224,9 +226,9 @@ class BadgrBackend(BadgeBackend):
             }
         }
 
-        # Damn it man!
-
         server_slug = badge_class.badgr_server_slug
+
+        LOGGER.info("BADGE_CLASS In _create_assertion the server_slug is: {}".format(server_slug))
 
         response = requests.post(
             self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
@@ -260,11 +262,16 @@ class BadgrBackend(BadgeBackend):
         """
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created NOW!")
 
-        slug=badge_class.badgr_server_slug
-        LOGGER.info("BADGE_CLASS: In _ensure_badge_created the badge_class.badgr_server_slug is: {}".format(slug))
+        server_slug=badge_class.badgr_server_slug
+        LOGGER.info("BADGE_CLASS: In _ensure_badge_created the badge_class.badgr_server_slug is: {}".format(server_slug))
+        LOGGER.info("BADGE_CLASS: In _ensure_badge_created the type(badgr_server_slug is): {}".format(type(server_slug))
 
-        if slug in BadgrBackend.badges:
-            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The slug IS in BadgrBackend.badges.. LEAVING _ensure_badge_created")
+
+
+        if server_slug == None or server_slug == "":
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The slug IS NOT in badge_class..)
+        else:
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The slug IS in badge_class..)
             return
 
         response=requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
@@ -276,9 +283,10 @@ class BadgrBackend(BadgeBackend):
             self._create_badge(badge_class)
         else:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE RESPONSE STATUS CODE FROM BADGR SERVER IS BAD: {}".format(status_code))
+            return
 
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
-        BadgrBackend.badges.append(slug)
+        # BadgrBackend.badges.append(slug)
 
     def award(self, bc, u):
         """
