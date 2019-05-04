@@ -261,9 +261,9 @@ class BadgrBackend(BadgeBackend):
 
 
         if not server_slug:
-            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS NOT in badge_class..)
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS NOT in badge_class..")
         else:
-            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS in badge_class..)
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS in badge_class..")
             return
 
         response=requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
