@@ -235,7 +235,8 @@ class BadgrBackend(BadgeBackend):
 
         assertion.data=response.json()
         assertion.backend='BadgrBackend'
-        assertion.image_url=badge_class.img_url
+        assertion.image_url = settings.MEDIA_ROOT + '/public/img/epiphany-badge.png'
+        LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.image_url is: {}".format(assertion.image_url))
         assertion.assertion_url='https://firstcontactcrypto.com/assertion'
         assertion.save()
         return assertion
