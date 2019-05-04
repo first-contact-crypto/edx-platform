@@ -231,7 +231,7 @@ class BadgrBackend(BadgeBackend):
 
         assertion.badge_class = badge_class
 
-        LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
+        # LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
 
         assertion.data=response.json()
         assertion.backend='BadgrBackend'
