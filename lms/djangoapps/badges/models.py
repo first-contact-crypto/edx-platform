@@ -107,7 +107,7 @@ class BadgeClass(models.Model):
             criteria=criteria,
             image=image
         )
-        badge_class.full_clean()
+        # badge_class.full_clean()
         badge_class.save()
         return badge_class
 
