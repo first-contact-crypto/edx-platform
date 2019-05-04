@@ -22,7 +22,6 @@ from xmodule.modulestore.django import modulestore
 
 # Mine
 from django.core.files import File
-from urllib.request import urlopen
 
 
 LOGGER = logging.getLogger(__name__)
