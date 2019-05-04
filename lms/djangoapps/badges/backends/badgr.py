@@ -161,15 +161,7 @@ class BadgrBackend(BadgeBackend):
             'description': badge_class.description,
         }
 
-        # data = {
-        #     'name': badge_class.slug,
-        #     'description': badge_class.description
-        # }
         LOGGER.info("BADGE_APP.. The url is: {} , The headers are: {} , The data is {}".format(self._badgeclasses_url(), self._get_headers(), data))
-        # result = requests.post(
-        #     self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files,
-        #     timeout=settings.BADGR_TIMEOUT
-        # )
 
         result = requests.post(
             self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files, timeout=settings.BADGR_TIMEOUT)
@@ -268,10 +260,10 @@ class BadgrBackend(BadgeBackend):
 
 
 
-        if server_slug == None or server_slug == "":
-            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The slug IS NOT in badge_class..)
+        if not server_slug:
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS NOT in badge_class..)
         else:
-            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The slug IS in badge_class..)
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS in badge_class..)
             return
 
         response=requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
