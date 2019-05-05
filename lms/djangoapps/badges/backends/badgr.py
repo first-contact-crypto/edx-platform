@@ -209,12 +209,19 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
+        uname = user.username + '@firstcontactcrypto.com'
+        ptid = user.username
+
+
+        LOGGER.info("BADGE_CLASS: In _create_assertion.. the user.username;user.email is: {} ~~ {}".format(user.username, user.email))
+
+
         data = {
             'recipient': {
-                'identity': 'johndoe@firstcontactcrypto.com',
+                'identity': uname,
                 'type': 'email',
                 'hashed': False,
-                'plaintextIdentity': 'johndoe'
+                'plaintextIdentity': ptid
             }
         }
 
