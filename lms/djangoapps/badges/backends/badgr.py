@@ -270,7 +270,6 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created the type(badgr_server_slug is): {}".format(type(server_slug)))
 
 
-
         if not server_slug:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS NOT in badge_class..")
         else:
@@ -286,6 +285,7 @@ class BadgrBackend(BadgeBackend):
             self._create_badge(badge_class)
         else:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE RESPONSE STATUS CODE FROM BADGR SERVER IS BAD: {}".format(status_code))
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE REPONSE IS: ")
             return
 
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
