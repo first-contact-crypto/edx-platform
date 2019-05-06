@@ -256,6 +256,7 @@ class BadgrBackend(BadgeBackend):
         """
         Headers to send along with the request-- used for authentication.
         """
+        LOGGER.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN is: {}".format(settings.BADGR_API_TOKEN))
         return {'Authorization': 'Bearer {}'.format(settings.BADGR_API_TOKEN)}
 
     def _ensure_badge_created(self, badge_class):
