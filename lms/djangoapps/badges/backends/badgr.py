@@ -209,7 +209,7 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
-        uname = user.username + '@firstcontactcrypto.com'
+        uname = user.email
         ptid = user.username
 
 
