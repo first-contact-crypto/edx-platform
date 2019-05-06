@@ -285,7 +285,9 @@ class BadgrBackend(BadgeBackend):
             self._create_badge(badge_class)
         else:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE RESPONSE STATUS CODE FROM BADGR SERVER IS BAD: {}".format(status_code))
-            LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE REPONSE IS: ")
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE REPONSE HEADER IS: {}".format(response.headers())
+
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE REPONSE IS: {}".format(response.json()))
             return
 
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
