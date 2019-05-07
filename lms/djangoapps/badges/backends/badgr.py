@@ -314,7 +314,7 @@ class BadgrBackend(BadgeBackend):
                 self.refresh_token = data['refresh_token']
                 _ensure_badge_created(badgr_server_slug)
 
-            LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE REPONSE IS: {}".format(response.json()))
+            LOGGER.error("BADGE_CLASS: In _ensure_badge_created .. CANNOT AUTHENTICATE !!!!!!!!")
             return
 
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
