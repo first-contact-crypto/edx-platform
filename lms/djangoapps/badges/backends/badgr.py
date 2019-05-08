@@ -44,11 +44,21 @@ class BadgrBackend(BadgeBackend):
 
     @property
     def access_token(self):
-        return os.environ.get("BADGR_ACCESS_TOKEN")
+        fname = '/openedx/data/uploads/badgr/badgr.json'
+        at = None
+        with open(fname, 'r') as f:
+            info = json.load(f)
+            at = info['badgr_access_token']
+        return at
 
     @property
     def refresh_token(self):
-        return os.environ.get()
+        fname = '/openedx/data/uploads/badgr/badgr.json'
+        rt = None
+        with open(fname, 'r') as f:
+            info = json.load(f)
+            rt = info['badgr_refresh_token']
+        return rt
 
     # NEW
     def _badgeclasses_url(self, issuer_slug=settings.BADGR_ISSUER_SLUG):
@@ -266,12 +276,12 @@ class BadgrBackend(BadgeBackend):
 
             if response.status_code == 200:
                 data = response.json()
-                self.access_token = data['access_token']
-                LOGGER.info("BADGE_CLASS: In _ensure_badge_created.. the new BADGR_ACCESS_TOKEN is: {}".format(self.access_token))
-                os.environ['BADGR_ACCESS_TOKEN'] = self.access_token
-                self.refresh_token = data['refresh_token']
-                os.environ['BADGR_REFRESH_TOKEN'] = self.refresh_token
-                LOGGER.info("BADGE_CLASS: In _ensure_badge_created.. the new BADGR_REFRESH_TOKEN is: {}".format(self.refresh_token))
+                fname = '/openedx/data/uploads/badgr/badgr.json'
+                at = data['access_token']
+                rt = data['refresh_token']
+                tokens = {'badgr_access_token': at, 'refresh_token': rt}
+                with open(fname, 'w') as f:
+                    json.dump(tokens, f)
                 _ensure_badge_created(badgr_server_slug)
 
             LOGGER.error("BADGE_CLASS: In _ensure_badge_created .. CANNOT AUTHENTICATE !!!!!!!!")
