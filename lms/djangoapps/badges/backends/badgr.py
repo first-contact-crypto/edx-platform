@@ -274,7 +274,7 @@ class BadgrBackend(BadgeBackend):
             }
 
             response = requests.post(
-                self.authorization_url(), json=data, timeout=settings.BADGR_TIMEOUT
+                self._refresh_token_url(), json=data, timeout=settings.BADGR_TIMEOUT
             )
 
             if response.status_code == 200:
