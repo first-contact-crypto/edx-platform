@@ -228,7 +228,7 @@ class BadgrBackend(BadgeBackend):
 
 
     @staticmethod
-    def _get_headers():
+    def _get_headers(self):
         """
         Headers to send along with the request-- used for authentication.
         """
