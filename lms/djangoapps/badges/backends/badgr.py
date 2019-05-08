@@ -5,6 +5,7 @@ import hashlib
 import logging
 import mimetypes
 import json
+import os
 
 import requests
 from django.conf import settings
@@ -26,15 +27,13 @@ class BadgrBackend(BadgeBackend):
     Backend for Badgr-Server by Concentric Sky. http://info.badgr.io/
     """
     badges = []
-    access_token = ""
-    refresh_token = ""
 
     def __init__(self):
         super(BadgrBackend, self).__init__()
-        if not settings.BADGR_API_TOKEN:
-            raise ImproperlyConfigured("BADGR_API_TOKEN not set.")
-        self.access_token = settings.BADGR_API_TOKEN
-        self.refresh_token = settings.BADGR_REFRESH_TOKEN
+        # if not settings.BADGR_API_TOKEN:
+        #     raise ImproperlyConfigured("BADGR_API_TOKEN not set.")
+        # self.access_token = settings.BADGR_API_TOKEN
+        # # self.refresh_token = settings.BADGR_REFRESH_TOKEN
 
     @lazy
     def _base_url(self):
@@ -42,6 +41,14 @@ class BadgrBackend(BadgeBackend):
         Base URL for all API requests.
         """
         return "{}/v2".format(settings.BADGR_BASE_URL)
+
+    @property
+    def access_token(self):
+        return os.environ.get("BADGR_ACCESS_TOKEN")
+
+    @property
+    def refresh_token(self):
+        return os.environ.get()
 
     # NEW
     def _badgeclasses_url(self, issuer_slug=settings.BADGR_ISSUER_SLUG):
@@ -63,57 +70,6 @@ class BadgrBackend(BadgeBackend):
         Get a new access token using the refresh token. Get and set from settings.
         """
         return "https://api.badgr.io/o/token".format(self._base_url)
-
-    # # # NEW
-    # # @lazy
-    # # def _backpack_url(self):
-    # #   """
-    # #   Backpack centric functionality
-    # #   """
-    # #   return "{}/backpack".format(self._base_url)
-
-    # # NEW
-    # @lazy
-    # def _issuers_url(self):
-    #   """
-    #   Issuer centric functionality
-    #   """
-    #   return "{}/issuers/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
-
-    # # NEW
-    # @lazy
-    # def _issuers_badgeclasses_url(self):
-    #     """
-    #     """
-    #     return "{}/badgeclasses".format(self._issuers_url)
-
-    # # # NEW
-    # # @lazy
-    # # def _badgeusers_url(self):
-    # #   """
-    # #   User centric
-    # #   """
-    # #   return "{}/users/{}".format(self._base_url, settings.BADGR_ISSUER_SLUG)
-
-    # @lazy
-    # def _badge_create_url(self):
-    #     """
-    #     URL for generating a new Badge specification
-    #     """
-    #     return "{}/badgeclasses".format(self._base_url)
-
-    # def _badge_url(self, slug):
-    #     """
-    #     Get the URL for a course's badge in a given mode.
-    #     """
-    #     return "{}/{}".format(self._badge_create_url, slug)
-
-    # def _assertion_url(self, slug):
-    #     """
-    #     URL for generating a new assertion.
-    #     """
-
-        return "{}/assertions".format(self._base_url)
 
     def _slugify(self, badge_class):
         """
@@ -266,7 +222,7 @@ class BadgrBackend(BadgeBackend):
         """
         Headers to send along with the request-- used for authentication.
         """
-        LOGGER.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(settings.BADGR_API_TOKEN), settings.BADGR_API_TOKEN))
+        LOGGER.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(self.access_token), self.access_token))
         return {'Authorization': 'Bearer {}'.format(self.access_token)}
 
     def _ensure_badge_created(self, badge_class):
@@ -311,7 +267,11 @@ class BadgrBackend(BadgeBackend):
             if response.status_code == 200:
                 data = response.json()
                 self.access_token = data['access_token']
+                LOGGER.info("BADGE_CLASS: In _ensure_badge_created.. the new BADGR_ACCESS_TOKEN is: {}".format(self.access_token))
+                os.environ['BADGR_ACCESS_TOKEN'] = self.access_token
                 self.refresh_token = data['refresh_token']
+                os.environ['BADGR_REFRESH_TOKEN'] = self.refresh_token
+                LOGGER.info("BADGE_CLASS: In _ensure_badge_created.. the new BADGR_REFRESH_TOKEN is: {}".format(self.refresh_token))
                 _ensure_badge_created(badgr_server_slug)
 
             LOGGER.error("BADGE_CLASS: In _ensure_badge_created .. CANNOT AUTHENTICATE !!!!!!!!")
