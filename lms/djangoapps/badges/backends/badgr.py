@@ -27,13 +27,14 @@ class BadgrBackend(BadgeBackend):
     Backend for Badgr-Server by Concentric Sky. http://info.badgr.io/
     """
     badges = []
+    access_token_cls = ''
+    refresh_token_cls = ''
 
     def __init__(self):
         super(BadgrBackend, self).__init__()
-        # if not settings.BADGR_API_TOKEN:
-        #     raise ImproperlyConfigured("BADGR_API_TOKEN not set.")
-        # self.access_token = settings.BADGR_API_TOKEN
-        # # self.refresh_token = settings.BADGR_REFRESH_TOKEN
+        # trigger class variables being initialized:
+        self.access_token
+        self.refresh_token
 
     @lazy
     def _base_url(self):
@@ -49,6 +50,7 @@ class BadgrBackend(BadgeBackend):
         with open(fname, 'r') as f:
             info = json.load(f)
             at = info['badgr_access_token']
+            BadgrBackend.access_token_cls = at
         return at
 
     @property
@@ -58,6 +60,7 @@ class BadgrBackend(BadgeBackend):
         with open(fname, 'r') as f:
             info = json.load(f)
             rt = info['badgr_refresh_token']
+            BadgrBackend.refresh_token_cls = rt
         return rt
 
     # NEW
@@ -232,8 +235,8 @@ class BadgrBackend(BadgeBackend):
         """
         Headers to send along with the request-- used for authentication.
         """
-        LOGGER.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(self.access_token), self.access_token))
-        return {'Authorization': 'Bearer {}'.format(self.access_token)}
+        LOGGER.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(BadgrBackend.access_token_cls), BadgrBackend.access_token_cls))
+        return {'Authorization': 'Bearer {}'.format(BadgrBackend.access_token_cls)}
 
     def _ensure_badge_created(self, badge_class):
         """
