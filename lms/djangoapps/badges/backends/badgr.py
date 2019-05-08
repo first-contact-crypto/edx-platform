@@ -137,10 +137,10 @@ class BadgrBackend(BadgeBackend):
             'description': badge_class.description,
         }
 
-        LOGGER.info("BADGE_APP.. The url is: {} , The headers are: {} , The data is {}".format(self._badgeclasses_url(), self._get_headers(), data))
+        LOGGER.info("BADGE_APP.. The url is: {}, The data is {}".format(self._badgeclasses_url(), data))
 
         result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files, timeout=settings.BADGR_TIMEOUT)
+            self._badgeclasses_url(), headers=cls._get_headers(), data=data, files=files, timeout=settings.BADGR_TIMEOUT)
 
         self._log_if_raised(result, data)
 
@@ -227,7 +227,7 @@ class BadgrBackend(BadgeBackend):
         return assertion
 
 
-    @staticmethod
+    # @staticmethod
     def _get_headers(self):
         """
         Headers to send along with the request-- used for authentication.
@@ -252,7 +252,7 @@ class BadgrBackend(BadgeBackend):
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS in badge_class..")
             return
 
-        response=requests.get(self._badgeclasses_url(), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
+        response=requests.get(self._badgeclasses_url(), headers=cls._get_headers(), timeout=settings.BADGR_TIMEOUT)
         status_code=response.status_code
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..the status code from 'get badgr server badgeclasesses' is: {}".format(status_code))
 
