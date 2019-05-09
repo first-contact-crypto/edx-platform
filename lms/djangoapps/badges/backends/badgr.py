@@ -41,6 +41,7 @@ class BadgrBackend(BadgeBackend):
         """
         Base URL for all API requests.
         """
+        LOGGER.info("BADGE_CLASS: In _base_url.. the settings.BADGR_BASE_URL is: {}".format(settings.BADGR_BASE_URL))
         return "{}/v2".format(settings.BADGR_BASE_URL)
 
     @property
