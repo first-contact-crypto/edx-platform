@@ -292,7 +292,7 @@ class BadgrBackend(BadgeBackend):
             return
 
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
-        BadgrBackend.badges.append(slug)
+        BadgrBackend.badges.append(badgr_server_slug)
 
     def award(self, bc, u):
         """
