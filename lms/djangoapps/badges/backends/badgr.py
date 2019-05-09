@@ -286,13 +286,13 @@ class BadgrBackend(BadgeBackend):
                 tokens = {'badgr_access_token': at, 'refresh_token': rt}
                 with open(fname, 'w') as f:
                     json.dump(tokens, f)
-                _ensure_badge_created(badgr_server_slug)
+                _ensure_badge_created(server_slug)
 
             LOGGER.error("BADGE_CLASS: In _ensure_badge_created .. CANNOT AUTHENTICATE !!!!!!!!")
             return
 
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
-        BadgrBackend.badges.append(badgr_server_slug)
+        BadgrBackend.badges.append(server_slug)
 
     def award(self, bc, u):
         """
