@@ -618,6 +618,7 @@ def student_dashboard(request):
     if not user.is_active:
         activate_account_message = Text(_(
             "Check your {email_start}{email}{email_end} inbox for an account activation link from {platform_name}. "
+            "If you do not see the email in your inbox, be sure to check your spam folder."
             "If you need help, contact {link_start}{platform_name} Support{link_end}."
         )).format(
             platform_name=platform_name,
