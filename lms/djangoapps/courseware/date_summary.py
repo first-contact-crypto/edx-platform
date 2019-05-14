@@ -280,7 +280,7 @@ class CourseEndDate(DateSummary):
             if is_active and CourseMode.is_eligible_for_certificate(mode):
                 return _('To earn a certificate, you must complete all requirements before this date.')
             else:
-                return _('After this date, course content will be archived.')
+                return _('')
         return _('This course is archived, which means you can review course content but it is no longer active.')
 
     @property
