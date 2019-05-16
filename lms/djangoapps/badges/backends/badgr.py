@@ -1,5 +1,6 @@
 """
 Badge Awarding backend for Badgr-Server.
+Trigger to rebuild.. that's all.. remove me sometime, k?
 """
 import hashlib
 import logging
