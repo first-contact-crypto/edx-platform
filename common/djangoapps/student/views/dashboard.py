@@ -58,6 +58,10 @@ from student.models import (
 from util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore
 
+
+from badges.api.views import UserBadgeAssertions
+from badges.models import BadgeClass, BadgeAssertion
+
 log = logging.getLogger("edx.student")
 
 
@@ -533,6 +537,16 @@ def _get_urls_for_resume_buttons(user, enrollments):
     return resume_button_urls
 
 
+
+
+def get_badge_assertions(user):
+    assertions = BadgeAssertion.objects.filter(user=user)
+    if assertions:
+        return assertions 
+    log.error("DASHBOARD.PY: In get_badge_assertions.. NO ASSERTIONS RETURNED!")
+
+
+
 @login_required
 @ensure_csrf_cookie
 @add_maintenance_banner
@@ -552,6 +566,8 @@ def student_dashboard(request):
     user = request.user
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
+
+    assertions = get_badge_assertions(user)
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
@@ -813,6 +829,7 @@ def student_dashboard(request):
         ]
 
     context = {
+        'assertions': assertions,
         'urls': urls,
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,

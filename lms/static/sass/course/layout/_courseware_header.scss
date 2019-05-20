@@ -28,6 +28,7 @@
     .tab {
       display: inline-block;
       list-style: none;
+      color: $primary;
 
       &.prominent {
         @include margin-right(16px);
@@ -48,7 +49,7 @@
         @extend %t-title7;
         @extend %t-regular;
 
-        color: theme-color("dark");
+        color: $primary;
         display: block;
         text-align: center;
         text-decoration: none;
