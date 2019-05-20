@@ -539,14 +539,6 @@ def _get_urls_for_resume_buttons(user, enrollments):
 
 
 
-def get_badge_assertions(user):
-    assertions = BadgeAssertion.objects.filter(user=user)
-    if assertions:
-        return assertions 
-    log.error("DASHBOARD.PY: In get_badge_assertions.. NO ASSERTIONS RETURNED!")
-
-
-
 @login_required
 @ensure_csrf_cookie
 @add_maintenance_banner
@@ -567,7 +559,7 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
-    assertions = get_badge_assertions(user)
+    assertions = BadgeAssertion.objects.filter(user=user)
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
