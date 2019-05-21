@@ -60,7 +60,7 @@ from xmodule.modulestore.django import modulestore
 
 
 # from badges.api.views import UserBadgeAssertions
-# from badges.models import BadgeAssertion
+from badges.models import BadgeAssertion
 
 log = logging.getLogger("edx.student")
 
@@ -559,7 +559,7 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
-    assertions = ['blah','blap', 'bling']  # BadgeAssertion.objects.filter(user=user)
+    assertions = BadgeAssertion.objects.filter(user=user)
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
