@@ -298,7 +298,7 @@ class BadgrBackend(BadgeBackend):
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE RESPONSE STATUS CODE FROM BADGR SERVER IS BAD: {}".format(status_code))
             # LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE REPONSE HEADER IS: {}".format(response.headers)
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. Trying refresh access token now...")
-            ret_code = self._get_new_access_token(badge_class):
+            ret_code = self._get_new_access_token(badge_class)
             if not ret_code == 200:
                 LOGGER.error("BADGR.PY: In _ensure_badge_created.. ERROR: Could not refresh the badgr token!")
                 return
