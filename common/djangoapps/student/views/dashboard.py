@@ -561,6 +561,7 @@ def student_dashboard(request):
 
     assertions = BadgeAssertion.objects.filter(user=user)
     num_assertions = len(assertions)
+    assertion_image_url = assertions[0].image_url
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
@@ -822,7 +823,7 @@ def student_dashboard(request):
         ]
 
     context = {
-        'assertions': assertions,
+        'assertion_image_url': assertion_image_url,
         'num_assertions': str(num_assertions),
         'urls': urls,
         'programs_data': programs_data,
