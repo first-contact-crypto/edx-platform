@@ -560,6 +560,7 @@ def student_dashboard(request):
         return redirect(reverse('account_settings'))
 
     assertions = BadgeAssertion.objects.filter(user=user)
+    num_assertions = len(assertions)
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
@@ -822,6 +823,7 @@ def student_dashboard(request):
 
     context = {
         'assertions': assertions,
+        'num_assertions': str(num_assertions),
         'urls': urls,
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,
