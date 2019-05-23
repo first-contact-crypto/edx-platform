@@ -559,9 +559,25 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
+
     assertions = BadgeAssertion.objects.filter(user=user)
-    num_assertions = len(assertions)
-    assertion_image_url = assertions[0].image_url
+    num_epip_asserts = 0
+    num_course_asserts = 0
+    for assertion in assertions:
+        bc = assertion.badge_class
+        if bc.slug == 'epiphany':
+            num_epip_asserts += 1
+        elif bc.slug == 'course':
+            num_course_asserts += 1
+        else:
+            log.error("DASHBOARD.py: In student_dashboard.. This badge_class.slug is NOT either 'course' or 'epiphany'!")
+
+
+
+
+
+
+
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
@@ -823,8 +839,8 @@ def student_dashboard(request):
         ]
 
     context = {
-        'assertion_image_url': assertion_image_url,
-        'num_assertions': str(num_assertions),
+        'num_epiphany_assertions': str(num_epip_asserts),
+        'num_course_asserts': str(num_course_asserts),
         'urls': urls,
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,
