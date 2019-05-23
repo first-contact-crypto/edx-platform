@@ -840,7 +840,7 @@ def student_dashboard(request):
 
     context = {
         'num_epiphany_assertions': str(num_epip_asserts),
-        'num_course_asserts': str(num_course_asserts),
+        'num_course_assertions': str(num_course_asserts),
         'urls': urls,
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,
