@@ -579,7 +579,7 @@ def student_dashboard(request):
         bc = assertion.badge_class
         u  = assertion.user 
         if bc.slug == 'epiphany':
-            pc_pkg['num_epip_asserts'] += 1
+            pc_pkg['num_epiph_asserts'] += 1
             if not pc_pkg['epiphany_badgeclass_id']:
                 pc_pkg['epiphany_badgeclass_id'] = bc.badgr_server_slug
                 pc_pkg['username'] = u.username
@@ -928,3 +928,29 @@ def student_dashboard(request):
     response = render_to_response('dashboard.html', context)
     set_logged_in_cookies(request, response, user)
     return response
+
+
+# [django]
+#    check
+#     compilemessages
+#     createcachetable
+#     dbshell
+#     diffsettings
+#     dumpdata
+#     flush
+#     inspectdb
+#     loaddata
+#     makemessages
+#     makemigrations
+#     migrate
+#     sendtestemail
+#     shell
+#     showmigrations
+#     sqlflush
+#     sqlmigrate
+#     sqlsequencereset
+#     squashmigrations
+#     startapp
+#     startproject
+#     test
+#     testserver
