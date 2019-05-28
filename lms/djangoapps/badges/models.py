@@ -65,6 +65,8 @@ class BadgeClass(models.Model):
     # Mode a badge was awarded for. Included for legacy/migration purposes.
     mode = models.CharField(max_length=100, default='', blank=True)
     image = models.ImageField(upload_to='public/img/', validators=[validate_badge_image])
+    image_url = models.URLField()
+
 
     def __unicode__(self):
         return u"<Badge '{slug}' for '{issuing_component}'>".format(

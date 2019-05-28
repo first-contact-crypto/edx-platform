@@ -1,8 +1,15 @@
 """
 Badge Awarding backend for Badgr-Server.
-Trigger to rebuild.. that's all.. remove me sometime, k?
-another
-yep
+
+EPIPHANY BADGE SERVER SLUG: V_MaSinhQJeKGOtZz6tDAQ
+IMAGE: https://media.us.badgr.io/uploads/badges/issuer_badgeclass_efc20af1-7d43-4d1e-877e-447244ea3fd3.png
+
+COURSE BADGE SERVER SLUG: 2gnNK3RZSlOutOrVeQlD_A
+IMAGE: https://media.us.badgr.io/uploads/badges/issuer_badgeclass_63237c1a-3f3d-40b7-9e48-085658d2799f.png
+
+REDEMPTION BADGE SERVER SLUG: XrG4QUcyTQGVch1VipS-Qw
+IMAGE: https://media.us.badgr.io/uploads/badges/issuer_badgeclass_41b742a0-d58c-4223-bffb-f2bc92fdd4bf.png
+
 """
 import hashlib
 import logging
@@ -150,49 +157,36 @@ class BadgrBackend(BadgeBackend):
             )
             raise
 
+
     def _create_badge(self, badge_class):
         """
-        Create the badge class on Badgr.
+        Create the badge class on Badgr.        
+        
+        EPIPHANY BADGE SERVER SLUG: V_MaSinhQJeKGOtZz6tDAQ
+        IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_efc20af1 - 7d43 - 4d1e - 877e-447244ea3fd3.png
+
+        COURSE BADGE SERVER SLUG: 2gnNK3RZSlOutOrVeQlD_A
+        IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_63237c1a - 3f3d - 40b7 - 9e48 - 085658d2799f.png
+
+        REDEMPTION BADGE SERVER SLUG: XrG4QUcyTQGVch1VipS-Qw
+        IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_41b742a0 - d58c - 4223 - bffb - f2bc92fdd4bf.png
         """
         LOGGER.info("BADGE_CLASS: In _create_badge NOW!")
-        image = badge_class.image
-        # We don't want to bother validating the file any further than making sure we can detect its MIME type,
-        # for HTTP. The Badgr-Server should tell us if there's anything in particular wrong with it.
-        content_type, __ = mimetypes.guess_type(image.name)
-        if not content_type:
-            raise ValueError(
-                u"Could not determine content-type of image! Make sure it is a properly named .png file. "
-                u"Filename was: {}".format(image.name)
-            )
-        files = {'image': (image.name, image, content_type)}
 
-        data = {
-            'name': badge_class.display_name,
-            'criteria': badge_class.criteria,
-            'description': badge_class.description,
-        }
+        server_slug = None
+        image_url = None
 
-        LOGGER.info("BADGE_APP.. The url is: {}, The data is {}".format(self._badgeclasses_url(), data))
+        if badge_class.slug == 'course':
+            server_slug = '2gnNK3RZSlOutOrVeQlD_A'
+            image_url = 'https//media.us.badgr.io/uploads/badges/issuer_badgeclass_63237c1a-3f3d-40b7-9e48-085658d2799f.png'
+        else:
+            server_slug = 'V_MaSinhQJeKGOtZz6tDAQ'
+            image_url = 'https://media.us.badgr.io/uploads/badges/issuer_badgeclass_efc20af1-7d43-4d1e-877e-447244ea3fd3.png'
 
-        result = requests.post(
-            self._badgeclasses_url(), headers=self._get_headers(), data=data, files=files, timeout=settings.BADGR_TIMEOUT)
-
-        self._log_if_raised(result, data)
-
-        result_json = result.json()
-        LOGGER.info("BADGE_CLASS: In _create_badge() (TYPE OF result.json(): {})..Here is the badgrserver after creating badge: {}".format(type(result_json), result_json))
-        LOGGER.info("BADGE_CLASS: In _create_badge() ..The result_json keys are: {}".format(result_json.keys()))
-
-        # try:
-        #     if 'entityId' in result_json:
-        server_slug = result_json['result'][0]['entityId']
-        LOGGER.info("BADGE_CLASS: In _create_badge.. the server_slug is: {}".format(server_slug))
         badge_class.badgr_server_slug = server_slug
+        badge_class.image_url = image_url
         badge_class.save()
-        #     else:
-        #         LOGGER.info("BADGE_CLASS: In _create_badge() ..What happend? THIS IS WRONG!!!")
-        # except Exception as excep:
-        #     LOGGER.error('Error on saving Badgr Server Slug of badge_class slug "{0}" with response json "{1}" : {2}'.format(badge_class.slug, result.json(), excep))
+
 
     def _send_assertion_created_event(self, user, assertion):
         """
@@ -255,7 +249,7 @@ class BadgrBackend(BadgeBackend):
 
         assertion.data=response.json()
         assertion.backend='BadgrBackend'
-        assertion.image_url = badge_class.image.url 
+        assertion.image_url = badge_class.image_url 
         LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.image_url is: {}".format(assertion.image_url))
         assertion.assertion_url='https://firstcontactcrypto.com/assertion'
         assertion.save()
@@ -280,7 +274,7 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created the badge_class.badgr_server_slug is: {}".format(server_slug))
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created the type(badgr_server_slug is): {}".format(type(server_slug)))
 
-
+        # Check if the in-house db has the badgr server_slug.. if not create a new badge on badgr server ...... WRONG! FIX ME
         if not server_slug:
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..The server_slug IS NOT in badge_class..")
         else:

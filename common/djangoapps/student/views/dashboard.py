@@ -2,6 +2,7 @@
 Dashboard view and supporting methods
 """
 
+import json
 import datetime
 import logging
 from collections import defaultdict
@@ -563,17 +564,33 @@ def student_dashboard(request):
     assertions = BadgeAssertion.objects.filter(user=user)
     num_epip_asserts = 0
     num_course_asserts = 0
+
+    epiph_slug = None
+
+    pc_pkg = {
+        "num_epiph_asserts": 0,
+        "num_course_asserts": 0,
+        "epiphany_badgeclass_id": "",
+        "username": "",
+        "useremail": ""
+    }
+
     for assertion in assertions:
         bc = assertion.badge_class
+        u  = assertion.user 
         if bc.slug == 'epiphany':
-            num_epip_asserts += 1
+            pc_pkg['num_epip_asserts'] += 1
+            if not pc_pkg['epiphany_badgeclass_id']:
+                pc_pkg['epiphany_badgeclass_id'] = bc.badgr_server_slug
+                pc_pkg['username'] = u.username
+                pc_pkg['useremail'] = u.email 
         elif bc.slug == 'course':
-            num_course_asserts += 1
+            pc_pkg['num_course_asserts'] += 1
         else:
             log.error("DASHBOARD.py: In student_dashboard.. This badge_class.slug is NOT either 'course' or 'epiphany'!")
 
 
-
+    pc_pkg_str = json.dumps(pc_pkg)
 
 
 
@@ -839,8 +856,8 @@ def student_dashboard(request):
         ]
 
     context = {
-        'num_epiphany_assertions': str(num_epip_asserts),
-        'num_course_assertions': str(num_course_asserts),
+        'pc_pkg': pc_pkg,
+        'pc_pkg_str': pc_pkg_str,
         'urls': urls,
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,
