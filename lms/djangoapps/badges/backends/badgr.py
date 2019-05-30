@@ -26,7 +26,7 @@ from requests.packages.urllib3.exceptions import HTTPError
 from badges.backends.base import BadgeBackend
 from badges.models import BadgeAssertion
 from badges.models import BadgeClass
-from django.models import ImageField
+from django.db.models import ImageField
 from eventtracking import tracker
 
 MAX_SLUG_LENGTH = 255
