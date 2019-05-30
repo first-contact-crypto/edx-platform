@@ -87,6 +87,8 @@ class BadgeClass(models.Model):
         and it will 'do the right thing'. It should be the exception, rather than the common case, that a badge class
         would need to be looked up without also being created were it missing.
         """
+
+
         LOGGER.info("BADGES_APP.. In get_badge_class..")
         slug = slug.lower()
         issuing_component = issuing_component.lower()

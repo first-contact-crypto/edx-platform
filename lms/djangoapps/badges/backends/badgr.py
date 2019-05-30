@@ -26,6 +26,7 @@ from requests.packages.urllib3.exceptions import HTTPError
 from badges.backends.base import BadgeBackend
 from badges.models import BadgeAssertion
 from badges.models import BadgeClass
+from django.models import ImageField
 from eventtracking import tracker
 
 MAX_SLUG_LENGTH = 255
@@ -36,7 +37,7 @@ class BadgrBackend(BadgeBackend):
     """
     Backend for Badgr-Server by Concentric Sky. http://info.badgr.io/
     """
-    badges = []
+    badgr_badgeclass_list = None
     access_token_cls = ''
     refresh_token_cls = ''
 
@@ -167,10 +168,8 @@ class BadgrBackend(BadgeBackend):
 
         COURSE BADGE SERVER SLUG: 2gnNK3RZSlOutOrVeQlD_A
         IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_63237c1a - 3f3d - 40b7 - 9e48 - 085658d2799f.png
-
-        REDEMPTION BADGE SERVER SLUG: XrG4QUcyTQGVch1VipS-Qw
-        IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_41b742a0 - d58c - 4223 - bffb - f2bc92fdd4bf.png
         """
+
         LOGGER.info("BADGE_CLASS: In _create_badge NOW!")
 
         server_slug = None
@@ -179,9 +178,19 @@ class BadgrBackend(BadgeBackend):
         if badge_class.slug == 'course':
             server_slug = '2gnNK3RZSlOutOrVeQlD_A'
             image_url = 'https//media.us.badgr.io/uploads/badges/issuer_badgeclass_63237c1a-3f3d-40b7-9e48-085658d2799f.png'
+            # GET BADGR IMAGE
+            image = requests.get(image_url, timeout=settings.BADGR_TIMEOUT)
+            with open('/openedx/data/uploads/badgr/images/course-badge.png', 'wb') as f:
+                f.write(image)
+            badge_class.image = models.ImageField('badgr/images/course-badge.png')
         else:
             server_slug = 'V_MaSinhQJeKGOtZz6tDAQ'
             image_url = 'https://media.us.badgr.io/uploads/badges/issuer_badgeclass_efc20af1-7d43-4d1e-877e-447244ea3fd3.png'
+            # GET BADGR IMAGE
+            image = requests.get(image_url, timeout=settings.BADGR_TIMEOUT)
+            with open('/openedx/data/uploads/badgr/images/epiphany-badge.png', 'wb') as f:
+                f.write(image)
+            badge_class.image = models.ImageField('badgr/images/epiphany-badge.png')
 
         badge_class.badgr_server_slug = server_slug
         badge_class.image_url = image_url
@@ -237,8 +246,8 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS In _create_assertion.. the data being sent is: {}".format(data))
 
         response = requests.post(
-            self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT
-        )
+            self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
+
         self._log_if_raised(response, data)
 
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
@@ -286,6 +295,8 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..the status code from 'get badgr server badgeclasesses' is: {}".format(status_code))
 
         if response.status_code == 200:
+            BadgrBackend.badgr_badgeclass_list = json.loads(response)['result']
+            LOGGER.info("BADGE_CLASS: In _ensure_badge_created.. here is the badgr_badgeclass_list: {}".format(BadgeBackend.badgr_badgeclass_list))
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling _create_badge NOW!")
             self._create_badge(badge_class)
         else:
@@ -297,13 +308,12 @@ class BadgrBackend(BadgeBackend):
                 LOGGER.error("BADGR.PY: In _ensure_badge_created.. ERROR: Could not refresh the badgr token!")
                 return
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
-        BadgrBackend.badges.append(server_slug)
+
 
     def award(self, bc, u):
         """
         Make sure the badge class has been created on the backend, and then award the badge class to the user.
         """
-
 
         LOGGER.info("BADGE_CLASS: In _award NOW! the user type is: {}".format(type(u)))
 
