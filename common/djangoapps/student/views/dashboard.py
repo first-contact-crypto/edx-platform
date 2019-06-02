@@ -560,8 +560,7 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
-
-    assertions = BadgeAssertion.objects.filter(user=user)
+    assertions = list(BadgeAssertion.objects.filter(user=user))
     log.info("DASHBOARD: In student_dashboard.. the number of assertions is: {}".format(assertions.length()))
     num_epip_asserts = 0
     num_course_asserts = 0
