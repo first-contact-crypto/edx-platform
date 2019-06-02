@@ -562,6 +562,7 @@ def student_dashboard(request):
 
 
     assertions = BadgeAssertion.objects.filter(user=user)
+    log.info("DASHBOARD: In student_dashboard.. the number of assertions is: {}".format(assertions.length()))
     num_epip_asserts = 0
     num_course_asserts = 0
 
@@ -579,13 +580,13 @@ def student_dashboard(request):
 
         bc = assertion.badge_class
         u  = assertion.user 
-        if bc.slug == 'epiphany' and assertion.badge_class.badgr_server_slug == 'V_MaSinhQJeKGOtZz6tDAQ':
+        if bc.slug == 'epiphany' and bc.badgr_server_slug == 'V_MaSinhQJeKGOtZz6tDAQ':
             pc_pkg['num_epiph_asserts'] += 1
             if not pc_pkg['epiphany_badgeclass_id']:
                 pc_pkg['epiphany_badgeclass_id'] = bc.badgr_server_slug
                 pc_pkg['username'] = u.username
                 pc_pkg['useremail'] = u.email 
-        elif bc.slug == 'course' and assertion.badge_class.badgr_server_slug == '2gnNK3RZSlOutOrVeQlD_A':
+        elif bc.slug == 'course' and bc.badgr_server_slug == '2gnNK3RZSlOutOrVeQlD_A':
             pc_pkg['num_course_asserts'] += 1
         else:
             log.error("DASHBOARD.py: In student_dashboard.. This badge_class.slug is NOT either 'course' or 'epiphany'!")
