@@ -560,8 +560,8 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
-    assertions = list(BadgeAssertion.objects.filter(user=user))
-    log.info("DASHBOARD: In student_dashboard.. the number of assertions is: {}".format(assertions.length()))
+    assertions = BadgeAssertion.objects.filter(user=user)
+    log.info("DASHBOARD: In student_dashboard.. the number of assertions is: {}".format(assertions.count()))
     num_epip_asserts = 0
     num_course_asserts = 0
 
@@ -579,6 +579,7 @@ def student_dashboard(request):
 
         bc = assertion.badge_class
         u  = assertion.user 
+        
         if bc.slug == 'epiphany' and bc.badgr_server_slug == 'V_MaSinhQJeKGOtZz6tDAQ':
             pc_pkg['num_epiph_asserts'] += 1
             if not pc_pkg['epiphany_badgeclass_id']:
