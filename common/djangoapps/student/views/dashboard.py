@@ -608,7 +608,7 @@ def student_dashboard(request):
         slug = assertion.badgr_server_slug
         for ba in badgr_assertions:
             ba_slug = ba.entityId
-            if slug = ba_slug:
+            if slug == ba_slug:
                 delete_list.remove(slug)
 
     [BadgeAssertion.objects.filter(user=user, badgr_server_slug).delete() for badgr_server_slug in delete_list]
