@@ -62,6 +62,7 @@ from xmodule.modulestore.django import modulestore
 
 # from badges.api.views import UserBadgeAssertions
 from badges.models import BadgeAssertion
+from badges.backends.badgr import BadgrBackend
 
 log = logging.getLogger("edx.student")
 
@@ -539,6 +540,25 @@ def _get_urls_for_resume_buttons(user, enrollments):
 
 
 
+def _log_if_raised(self, response, data=""):
+    """
+    Log server response if there was an error.
+    """
+    LOGGER.info("BADGE_CLASS: In _log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        LOGGER.error(
+            u"Encountered an error when contacting the Badgr-Server. Request sent to %r with headers %r.\n"
+            u"and data values %r\n"
+            u"Response status was %s.\n%s",
+            response.request.url, response.request.headers,
+            data,
+            response.status_code, response.content
+        )
+        raise
+
+
 
 @login_required
 @ensure_csrf_cookie
@@ -560,12 +580,19 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
-    assertions = BadgeAssertion.objects.filter(user=user)
+    assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
+    response = requests.post(
+            self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
+    self._log_if_raised(response, data)
+
+    badgr_assertions = response.json().result
+
     log.info("DASHBOARD: In student_dashboard.. the number of assertions is: {}".format(assertions.count()))
     num_epip_asserts = 0
     num_course_asserts = 0
 
     epiph_slug = None
+    delete_list = [a.badgr_server_slug for a in assertions]
 
     pc_pkg = {
         "num_epiph_asserts": 0,
@@ -576,10 +603,19 @@ def student_dashboard(request):
     }
 
     for assertion in assertions:
-
         bc = assertion.badge_class
         u  = assertion.user 
-        
+        slug = assertion.badgr_server_slug
+        for ba in badgr_assertions:
+            ba_slug = ba.entityId
+            if slug = ba_slug:
+                delete_list.remove(slug)
+
+    [BadgeAssertion.objects.filter(user=user, badgr_server_slug).delete() for badgr_server_slug in delete_list]
+    assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
+    for assertion in assertions:
+        bc = assertion.badge_class
+        u = assertion.user
         if bc.slug == 'epiphany' and bc.badgr_server_slug == 'V_MaSinhQJeKGOtZz6tDAQ':
             pc_pkg['num_epiph_asserts'] += 1
             if not pc_pkg['epiphany_badgeclass_id']:
@@ -591,12 +627,7 @@ def student_dashboard(request):
         else:
             log.error("DASHBOARD.py: In student_dashboard.. This badge_class.slug is NOT either 'course' or 'epiphany'!")
 
-
     pc_pkg_str = json.dumps(pc_pkg)
-
-
-
-
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 

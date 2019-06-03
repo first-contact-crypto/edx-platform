@@ -32,6 +32,8 @@ from eventtracking import tracker
 MAX_SLUG_LENGTH = 255
 LOGGER = logging.getLogger(__name__)
 
+EPIPHANY_BADGR_SLUG = 'V_MaSinhQJeKGOtZz6tDAQ'
+
 
 class BadgrBackend(BadgeBackend):
     """
@@ -244,6 +246,7 @@ class BadgrBackend(BadgeBackend):
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class, data=response.json())
         # LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
         assertion.backend='BadgrBackend'
+        asserton.badgr_server_slug = assertion.entityId
         assertion.image_url = badge_class.image_url 
         LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.image_url is: {}".format(assertion.image_url))
         assertion.assertion_url='https://firstcontactcrypto.com/assertions/epiphany.html'
@@ -305,3 +308,19 @@ class BadgrBackend(BadgeBackend):
 
         self._ensure_badge_created(bc)
         return self._create_assertion(bc, u, None)
+
+    @staticmethod
+    def getEpiphanyAssertions() {
+        response = requests.post(
+            self._assertions_url(EPIPHANY_BADGR_SLUG), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
+        self._log_if_raised(response, data)
+        return json.loads(response)
+    }
+
+    @staticmethod
+    def syncEpiphanyAssertions() {
+        bas = getEpiphanyAssertions()
+        las = BadgeAssertion.objects
+        for a in bas:
+            if a.recipient.
+    }
