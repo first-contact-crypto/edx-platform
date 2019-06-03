@@ -309,18 +309,4 @@ class BadgrBackend(BadgeBackend):
         self._ensure_badge_created(bc)
         return self._create_assertion(bc, u, None)
 
-    @staticmethod
-    def getEpiphanyAssertions() {
-        response = requests.post(
-            self._assertions_url(EPIPHANY_BADGR_SLUG), headers=self._get_headers(), timeout=settings.BADGR_TIMEOUT)
-        self._log_if_raised(response, data)
-        return json.loads(response)
-    }
 
-    @staticmethod
-    def syncEpiphanyAssertions() {
-        bas = getEpiphanyAssertions()
-        las = BadgeAssertion.objects
-        for a in bas:
-            if a.recipient.
-    }
