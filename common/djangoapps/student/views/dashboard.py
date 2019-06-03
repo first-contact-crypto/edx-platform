@@ -612,7 +612,7 @@ def student_dashboard(request):
                 delete_list.remove(slug)
 
     [BadgeAssertion.objects.filter(user=user, server_slug=x).delete() for x in delete_list]
-    assertions = BadgeAssertion.objects.filter(user=user, badge_class.badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
+    assertions = BadgeAssertion.objects.filter(user=user)
     for assertion in assertions:
         bc = assertion.badge_class
         u = assertion.user
