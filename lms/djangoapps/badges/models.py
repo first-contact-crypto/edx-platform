@@ -172,6 +172,7 @@ class BadgeAssertion(TimeStampedModel):
     assertion_url = models.URLField(null=True)
     badgr_server_slug = models.SlugField(max_length=255, default='')
 
+
     def __unicode__(self):
         return u"<{username} Badge Assertion for {slug} for {issuing_component}".format(
             username=self.user.username, slug=self.badge_class.slug,

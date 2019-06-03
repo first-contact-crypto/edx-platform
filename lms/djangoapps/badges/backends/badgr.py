@@ -247,7 +247,7 @@ class BadgrBackend(BadgeBackend):
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class, data=response.json())
         # LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
         assertion.backend='BadgrBackend'
-        asserton.badgr_server_slug = assertion.entityId
+        assertion.server_slug = response.json().result[0].entityId
         assertion.image_url = badge_class.image_url 
         LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.image_url is: {}".format(assertion.image_url))
         assertion.assertion_url='https://firstcontactcrypto.com/assertions/epiphany.html'

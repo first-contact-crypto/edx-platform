@@ -592,7 +592,7 @@ def student_dashboard(request):
     num_course_asserts = 0
 
     epiph_slug = None
-    delete_list = [a.badgr_server_slug for a in assertions]
+    delete_list = [a.server_slug for a in assertions]
 
     pc_pkg = {
         "num_epiph_asserts": 0,
@@ -605,14 +605,14 @@ def student_dashboard(request):
     for assertion in assertions:
         bc = assertion.badge_class
         u  = assertion.user 
-        slug = assertion.badgr_server_slug
+        slug = assertion.server_slug
         for ba in badgr_assertions:
             ba_slug = ba.entityId
             if slug == ba_slug:
                 delete_list.remove(slug)
 
-    [BadgeAssertion.objects.filter(user=user, badgr_server_slug=x).delete() for x in delete_list]
-    assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
+    [BadgeAssertion.objects.filter(user=user, server_slug=x).delete() for x in delete_list]
+    assertions = BadgeAssertion.objects.filter(user=user, badge_class.badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
     for assertion in assertions:
         bc = assertion.badge_class
         u = assertion.user
