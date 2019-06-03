@@ -225,11 +225,7 @@ class BadgrBackend(BadgeBackend):
         """
         uname = user.email
         ptid = user.username
-
-
         LOGGER.info("BADGE_CLASS: In _create_assertion.. the user.username;user.email is: {} ~~ {}".format(user.username, user.email))
-
-
         data = {
             'recipient': {
                 'identity': uname,
@@ -238,29 +234,19 @@ class BadgrBackend(BadgeBackend):
                 'plaintextIdentity': ptid
             }
         }
-
         server_slug = badge_class.badgr_server_slug
-
         LOGGER.info("BADGE_CLASS In _create_assertion the server_slug is: {}".format(server_slug))
-
         LOGGER.info("BADGE_CLASS In _create_assertion.. the data being sent is: {}".format(data))
-
         response = requests.post(
             self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
-
         self._log_if_raised(response, data)
 
-        assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class)
-
-        assertion.badge_class = badge_class
-
+        assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class, data=response.json())
         # LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
-
-        assertion.data=response.json()
         assertion.backend='BadgrBackend'
         assertion.image_url = badge_class.image_url 
         LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.image_url is: {}".format(assertion.image_url))
-        assertion.assertion_url='https://firstcontactcrypto.com/assertion'
+        assertion.assertion_url='https://firstcontactcrypto.com/assertions/epiphany.html'
         assertion.save()
         return assertion
 
