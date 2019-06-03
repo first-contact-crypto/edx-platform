@@ -33,6 +33,7 @@ MAX_SLUG_LENGTH = 255
 LOGGER = logging.getLogger(__name__)
 
 EPIPHANY_BADGR_SLUG = 'V_MaSinhQJeKGOtZz6tDAQ'
+BADGR_ISSUER_SLUG = 'rGy5MNWtQgSs1vfnLyPlmg'
 
 
 class BadgrBackend(BadgeBackend):
@@ -106,7 +107,7 @@ class BadgrBackend(BadgeBackend):
         return response.status_code
 
     # NEW
-    def _badgeclasses_url(self, issuer_slug=settings.BADGR_ISSUER_SLUG):
+    def _badgeclasses_url(self, issuer_slug=BADGR_ISSUER_SLUG):
         """
         Badge Class centric functionality.
         """
