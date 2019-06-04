@@ -168,7 +168,7 @@ class BadgeAssertion(TimeStampedModel):
     badge_class = models.ForeignKey(BadgeClass, on_delete=models.CASCADE)
     data = JSONField()
     backend = models.CharField(max_length=50)
-    #image_url = models.URLField(null=True)
+    image_url = models.URLField(null=True)
     assertion_url = models.URLField(null=True)
     #badgr_server_slug = models.SlugField(max_length=255, default='')
 
