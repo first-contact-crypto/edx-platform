@@ -65,7 +65,7 @@ class BadgeClass(models.Model):
     # Mode a badge was awarded for. Included for legacy/migration purposes.
     mode = models.CharField(max_length=100, default='', blank=True)
     image = models.ImageField(upload_to='public/img/', validators=[validate_badge_image])
-    # image_url = models.URLField(null=True)
+    image_url = models.URLField(null=True)
 
 
     def __unicode__(self):
@@ -168,9 +168,9 @@ class BadgeAssertion(TimeStampedModel):
     badge_class = models.ForeignKey(BadgeClass, on_delete=models.CASCADE)
     data = JSONField()
     backend = models.CharField(max_length=50)
-    # image_url = models.URLField(null=True)
+    image_url = models.URLField(null=True)
     assertion_url = models.URLField(null=True)
-    # badgr_server_slug = models.SlugField(max_length=255, default='')
+    badgr_server_slug = models.SlugField(max_length=255, default='')
 
 
     def __unicode__(self):
