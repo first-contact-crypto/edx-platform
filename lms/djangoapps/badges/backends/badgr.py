@@ -216,7 +216,7 @@ class BadgrBackend(BadgeBackend):
                 'course_id': unicode(assertion.badge_class.course_id),
                 'enrollment_mode': assertion.badge_class.mode,
                 'assertion_id': assertion.id,
-                'assertion_image_url': assertion.image_url,
+                'assertion_image_url': assertion.badge_class.image_url,
                 'assertion_json_url': assertion.assertion_url,
                 'issuer': assertion.data.get('issuer'),
             }
@@ -248,8 +248,7 @@ class BadgrBackend(BadgeBackend):
         # LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
         assertion.backend='BadgrBackend'
         assertion.server_slug = response.json().result[0].entityId
-        assertion.image_url = badge_class.image_url 
-        LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.image_url is: {}".format(assertion.image_url))
+        LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.badge_class.image_url is: {}".format(assertion.badge_class.image_url))
         assertion.assertion_url='https://firstcontactcrypto.com/assertions/epiphany.html'
         assertion.save()
         return assertion
