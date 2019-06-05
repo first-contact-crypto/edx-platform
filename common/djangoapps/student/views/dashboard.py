@@ -7,6 +7,7 @@ import datetime
 import logging
 import requests
 from collections import defaultdict
+from requests.packages.urllib3.exceptions import HTTPError
 
 from completion.exceptions import UnavailableCompletionData
 from completion.utilities import get_key_to_last_completed_course_block
