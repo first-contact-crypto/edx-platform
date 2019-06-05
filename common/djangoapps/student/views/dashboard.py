@@ -541,7 +541,7 @@ def _get_urls_for_resume_buttons(user, enrollments):
 
 
 
-def log_if_raised(self, response, data=""):
+def log_if_raised(response, data=""):
     """
     Log server response if there was an error.
     """
