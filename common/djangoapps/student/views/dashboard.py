@@ -541,7 +541,7 @@ def _get_urls_for_resume_buttons(user, enrollments):
 
 
 
-def _log_if_raised(self, response, data=""):
+def log_if_raised(self, response, data=""):
     """
     Log server response if there was an error.
     """
@@ -590,7 +590,7 @@ def student_dashboard(request):
 
     assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
-    self._log_if_raised(response, data)
+    log_if_raised(response, data)
 
     badgr_assertions = response.json().result
 
