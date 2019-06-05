@@ -590,7 +590,7 @@ def student_dashboard(request):
 
     assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
-    log_if_raised(response, data)
+    log_if_raised(response)
 
     badgr_assertions = response.json().result
 
