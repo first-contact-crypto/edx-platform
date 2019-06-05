@@ -593,7 +593,9 @@ def student_dashboard(request):
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
-    badgr_assertions = response.json().result
+    log.info("In student_dashboard.. the response is: {0}", response.json())
+
+    badgr_assertions = response.json()['result']
 
     log.info("DASHBOARD: In student_dashboard.. the number of assertions is: {}".format(assertions.count()))
     num_epip_asserts = 0
