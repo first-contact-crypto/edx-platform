@@ -563,7 +563,7 @@ def get_headers():
     """
     Headers to send along with the request-- used for authentication.
     """
-    LOGGER.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(BadgrBackend.access_token_cls), BadgrBackend.access_token_cls))
+    log.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(BadgrBackend.access_token_cls), BadgrBackend.access_token_cls))
     return {'Authorization': 'Bearer {}'.format(BadgrBackend.access_token_cls)}
 
 
