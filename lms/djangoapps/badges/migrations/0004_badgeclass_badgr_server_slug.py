@@ -20,5 +20,10 @@ class Migration(migrations.Migration):
             model_name='badgeassertion',
             name='badgr_server_slug',
             field=models.SlugField(default=b'', max_length=255),
+        ),
+        migrations.AddField(
+            model_name='badgeassertion',
+            name='image_url',
+            field=models.URLField(null=True),
         )
     ]
