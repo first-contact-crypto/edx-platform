@@ -545,11 +545,11 @@ def log_if_raised(response, data=""):
     """
     Log server response if there was an error.
     """
-    LOGGER.info("BADGE_CLASS: In _log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
+    log.info("BADGE_CLASS: In _log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
     try:
         response.raise_for_status()
     except HTTPError:
-        LOGGER.error(
+        log.error(
             u"Encountered an error when contacting the Badgr-Server. Request sent to %r with headers %r.\n"
             u"and data values %r\n"
             u"Response status was %s.\n%s",
