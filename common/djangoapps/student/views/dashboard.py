@@ -559,6 +559,13 @@ def _log_if_raised(self, response, data=""):
         )
         raise
 
+def get_headers():
+    """
+    Headers to send along with the request-- used for authentication.
+    """
+    LOGGER.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(BadgrBackend.access_token_cls), BadgrBackend.access_token_cls))
+    return {'Authorization': 'Bearer {}'.format(BadgrBackend.access_token_cls)}
+
 
 
 @login_required
@@ -582,8 +589,7 @@ def student_dashboard(request):
         return redirect(reverse('account_settings'))
 
     assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
-    response = requests.post(
-            self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
+    response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     self._log_if_raised(response, data)
 
     badgr_assertions = response.json().result
