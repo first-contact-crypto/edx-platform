@@ -5,6 +5,7 @@ Dashboard view and supporting methods
 import json
 import datetime
 import logging
+import requests
 from collections import defaultdict
 
 from completion.exceptions import UnavailableCompletionData
