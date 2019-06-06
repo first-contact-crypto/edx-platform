@@ -244,7 +244,7 @@ class BadgrBackend(BadgeBackend):
             self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
         self._log_if_raised(response, data)
 
-        assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class, data=response.json())
+        assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class, data=response.json(), image_url="https://firstcontactcrypto.com/img/logo.png")
         # LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
         assertion.backend='BadgrBackend'
         assertion.server_slug = response.json().result[0].entityId
