@@ -68,6 +68,8 @@ from badges.backends.badgr import BadgrBackend
 
 log = logging.getLogger("edx.student")
 
+BADGR_ACCESS_TOKEN = 'yb9jYZ6rLwbTji8C1y5Ppi8Q3vNo57'
+
 
 def get_org_black_and_whitelist_for_site():
     """
@@ -564,8 +566,11 @@ def get_headers():
     """
     Headers to send along with the request-- used for authentication.
     """
-    log.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(BadgrBackend.access_token_cls), BadgrBackend.access_token_cls))
-    return {'Authorization': 'Bearer {}'.format('Atf6Wt7VXmVwi7Jr9YQMB0UvzKeto0')}
+    log.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN length is: {} .. and the TOKEN is: {}".format(len(BADGR_ACCESS_TOKEN))
+    ret = {
+        'Authorization': 'Bearer yb9jYZ6rLwbTji8C1y5Ppi8Q3vNo57'
+          }
+    return ret 
 
 
 
@@ -588,6 +593,20 @@ def student_dashboard(request):
     user = request.user
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
@@ -638,6 +657,22 @@ def student_dashboard(request):
             log.error("DASHBOARD.py: In student_dashboard.. This badge_class.slug is NOT either 'course' or 'epiphany'!")
 
     pc_pkg_str = json.dumps(pc_pkg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
