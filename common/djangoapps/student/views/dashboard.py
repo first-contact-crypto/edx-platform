@@ -592,7 +592,7 @@ def student_dashboard(request):
 
     """
     user = request.user
-    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {0} the user.useremail is: {1}", user.username, user.useremail)
+    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {0} the user.useremail is: {1}", user.username, user.email)
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
