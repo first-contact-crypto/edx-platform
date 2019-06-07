@@ -628,7 +628,7 @@ def student_dashboard(request):
 
     if len(badgr_assertions['result']) == 0:
         for ea in edx_assertions:
-            ba = BadgeAssertion.objects.filter(user=user, ea['badgr_server_slug'])
+            ba = BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug'])
             LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba))
     else:
         matched = False
