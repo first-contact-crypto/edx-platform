@@ -66,10 +66,11 @@ from xmodule.modulestore.django import modulestore
 from badges.models import BadgeAssertion
 from badges.backends.badgr import BadgrBackend
 
-log = logging.getLogger("edx.student")
+LOG = logging.getLogger("edx.student")
 
 BADGR_ACCESS_TOKEN = 'yb9jYZ6rLwbTji8C1y5Ppi8Q3vNo57'
-
+BADGR_SERVER_SLUG_EPIPHANY = "V_MaSinhQJeKGOtZz6tDAQ"
+BADGR_SERVER_SLUG_COURSE = "2gnNK3RZSlOutOrVeQlD_A"
 
 def get_org_black_and_whitelist_for_site():
     """
@@ -140,7 +141,7 @@ def _allow_donation(course_modes, course_id, enrollment):
             text_type(course_id): [mode.slug for mode in modes]
             for course_id, modes in iteritems(CourseMode.all_modes_for_courses([course_id]))
         }
-        log.error(
+        LOG.error(
             u'Can not find `%s` in course modes.`%s`. All modes: `%s`',
             course_id,
             flat_unexpired_modes,
@@ -220,10 +221,10 @@ def get_course_enrollments(user, org_whitelist, org_blacklist):
     """
     for enrollment in CourseEnrollment.enrollments_for_user_with_overviews_preload(user):
 
-        # If the course is missing or broken, log an error and skip it.
+        # If the course is missing or broken, LOG an error and skip it.
         course_overview = enrollment.course_overview
         if not course_overview:
-            log.error(
+            LOG.error(
                 "User %s enrolled in broken or non-existent course %s",
                 user.username,
                 enrollment.course_id
@@ -335,7 +336,7 @@ def is_course_blocked(request, redeemed_registration_codes, course_key):
                 blocked = True
                 # disabling email notifications for unpaid registration courses
                 Optout.objects.get_or_create(user=request.user, course_id=course_key)
-                log.info(
+                LOG.info(
                     u"User %s (%s) opted out of receiving emails from course %s",
                     request.user.username,
                     request.user.email,
@@ -507,7 +508,7 @@ def _credit_statuses(user, course_enrollments):
             provider_id = purchased_credit_providers.get(course_key)
             if provider_id is None:
                 status["error"] = True
-                log.error(
+                LOG.error(
                     u"Could not find credit provider associated with credit enrollment "
                     u"for user %s in course %s.  The user will not be able to see his or her "
                     u"credit request status on the student dashboard.  This attribute should "
@@ -548,11 +549,11 @@ def log_if_raised(response, data=""):
     """
     Log server response if there was an error.
     """
-    log.info("BADGE_CLASS: In _log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
+    LOG.info("BADGE_CLASS: In _log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
     try:
         response.raise_for_status()
     except HTTPError:
-        log.error(
+        LOG.error(
             u"Encountered an error when contacting the Badgr-Server. Request sent to %r with headers %r.\n"
             u"and data values %r\n"
             u"Response status was %s.\n%s",
@@ -566,7 +567,7 @@ def get_headers():
     """
     Headers to send along with the request-- used for authentication.
     """
-    log.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN is: {}".format(BADGR_ACCESS_TOKEN))
+    LOG.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN is: {}".format(BADGR_ACCESS_TOKEN))
     ret = {
         'Authorization': 'Bearer yb9jYZ6rLwbTji8C1y5Ppi8Q3vNo57'
           }
@@ -591,37 +592,28 @@ def student_dashboard(request):
 
     """
     user = request.user
+    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {0} the user.useremail is: {1}", user.username, user.useremail)
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
+    edx_assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
+    LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions are: {}".format(edx_assertions))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug="V_MaSinhQJeKGOtZz6tDAQ")
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
-    log.info("In student_dashboard.. the response is: {0}", response.json())
+    badgr_assertions = response.json()
+    LOG.info("DASHBOARD: In student_dashboard.. the response get_assertions badgr_server is: {0}", badgr_assertions)
 
-    badgr_assertions = response.json()['result']
 
-    log.info("DASHBOARD: In student_dashboard.. the number of assertions is: {}".format(assertions.count()))
-    num_epip_asserts = 0
+    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(assertions.values()[0]['result'].count()))
+    LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result']))
+
+    num_epiph_asserts = 0
     num_course_asserts = 0
 
     epiph_slug = None
-    delete_list = [a.server_slug for a in assertions]
+    # delete_list = [a.server_slug for a in assertions]
 
     pc_pkg = {
         "num_epiph_asserts": 0,
@@ -631,48 +623,34 @@ def student_dashboard(request):
         "useremail": ""
     }
 
-    for assertion in assertions:
-        bc = assertion.badge_class
-        u  = assertion.user 
-        slug = assertion.server_slug
-        for ba in badgr_assertions:
-            ba_slug = ba.entityId
-            if slug == ba_slug:
-                delete_list.remove(slug)
+    pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions['result'])
+    pc_pkg['num_course_asserts'] = len(BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE).values())
 
-    [BadgeAssertion.objects.filter(user=user, server_slug=x).delete() for x in delete_list]
-    assertions = BadgeAssertion.objects.filter(user=user)
-    for assertion in assertions:
-        bc = assertion.badge_class
-        u = assertion.user
-        if bc.slug == 'epiphany' and bc.badgr_server_slug == 'V_MaSinhQJeKGOtZz6tDAQ':
-            pc_pkg['num_epiph_asserts'] += 1
-            if not pc_pkg['epiphany_badgeclass_id']:
-                pc_pkg['epiphany_badgeclass_id'] = bc.badgr_server_slug
-                pc_pkg['username'] = u.username
-                pc_pkg['useremail'] = u.email 
-        elif bc.slug == 'course' and bc.badgr_server_slug == '2gnNK3RZSlOutOrVeQlD_A':
-            pc_pkg['num_course_asserts'] += 1
-        else:
-            log.error("DASHBOARD.py: In student_dashboard.. This badge_class.slug is NOT either 'course' or 'epiphany'!")
+    if len(badgr_assertions['result']) == 0:
+        for ea in edx_assertions:
+            ba = BadgeAssertion.objects.filter(user=user, ea['badgr_server_slug'])
+            LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba))
+    else:
+        matched = False
+        ea_server_slug = None         
+        for i in len(edx_assertions['result']):
+            if matched == True:
+                # uses the ea from the last iteration to delete the ea record
+                BadgeAssertion.objects.filter(user=user, slug='epiphany', badgr_server_slug=ea_server_slug).delete()
+            matched = False
+            ea_id = ea['user']['useremail']
+            ea_server_slug = ea['badgr_server_slug']
+            for i in len(badgr_assertions['result']):
+                ba = badgr_assertions['result']
+                ba_id = ba['recipient']['identity']
+                ba_server_slug = ba['entityId']
+                if ba_server_slug == ea_server_slug:
+                    matched = True
+
+    ea_new_assertion_cnt = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY).values().len()
+    LOG.info("DASHBOARD: In student_dashboard.. the new edx_assertion_cnt is: {}".format(ea_new_assertion_cnt))
 
     pc_pkg_str = json.dumps(pc_pkg)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 

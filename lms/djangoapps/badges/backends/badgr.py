@@ -240,8 +240,7 @@ class BadgrBackend(BadgeBackend):
         server_slug = badge_class.badgr_server_slug
         LOGGER.info("BADGE_CLASS In _create_assertion the server_slug is: {}".format(server_slug))
         LOGGER.info("BADGE_CLASS In _create_assertion.. the data being sent is: {}".format(data))
-        response = requests.post(
-            self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
+        response = requests.post(self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
         self._log_if_raised(response, data)
 
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class, data=response.json(), image_url="https://firstcontactcrypto.com/img/logo.png")
@@ -251,6 +250,13 @@ class BadgrBackend(BadgeBackend):
         LOGGER.info("BADGE_CLASS: In _create_assertion.. the assertion.image_url is: {}".format(assertion.image_url))
         assertion.assertion_url='https://firstcontactcrypto.com/assertions/epiphany.html'
         assertion.save()
+
+
+        if assertion.badge_class.slug == 'course':
+            epiphany_badge_class = BadgeClass.get_or_create(badgr_server_slug='V_MaSinhQJeKGOtZz6tDAQ')
+            for i in 5:
+                _create_assertion(epiphany_badge_class, user, None)
+
         return assertion
 
 
