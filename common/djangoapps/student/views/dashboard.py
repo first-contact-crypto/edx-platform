@@ -607,7 +607,7 @@ def student_dashboard(request):
 
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(assertions.values()[0]['result'].count()))
-    LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result']))
+    LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result'])))
 
     num_epiph_asserts = 0
     num_course_asserts = 0
