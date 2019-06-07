@@ -599,9 +599,6 @@ def student_dashboard(request):
     edx_assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions are: {}".format(edx_assertions))
 
-    num_edx_asserions = 0
-    [num_edx_asserions+=1 for ea in edx_assertions]
-
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
@@ -610,7 +607,7 @@ def student_dashboard(request):
 
     LOG.info("DASHBOARD")
 
-    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(num_edx_asserions))
+    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
     LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result'])))
 
     num_epiph_asserts = 0
