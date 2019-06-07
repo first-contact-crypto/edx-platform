@@ -569,7 +569,7 @@ def get_headers():
     """
     LOG.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN is: {}".format(BADGR_ACCESS_TOKEN))
     ret = {
-        'Authorization': 'Bearer yb9jYZ6rLwbTji8C1y5Ppi8Q3vNo57'
+        'Authorization': 'Bearer ' + BADGR_ACCESS_TOKEN
           }
     return ret 
 
