@@ -607,7 +607,7 @@ def student_dashboard(request):
 
     # this filters the assertions from badgr server to just this user
     ba_tmp = badgr_assertions
-    for i in len(ba_tmp['result']):
+    for i in range(len(ba_tmp['result'])):
         ba = ba_tmp['result'][i]
         if ba['recipient']['identity'] != user.email:
             LOG.info("DASBOARD: In student_dashboard.. REMOVING un-needed assertion")
