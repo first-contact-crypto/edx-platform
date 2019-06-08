@@ -649,7 +649,7 @@ def student_dashboard(request):
                 if ba_server_slug == ea_server_slug:
                     matched = True
 
-    ea_new_assertion_cnt = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY).values().len()
+    ea_new_assertion_cnt = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY).count()
     LOG.info("DASHBOARD: In student_dashboard.. the new edx_assertion_cnt is: {}".format(ea_new_assertion_cnt))
 
     pc_pkg_str = json.dumps(pc_pkg)
