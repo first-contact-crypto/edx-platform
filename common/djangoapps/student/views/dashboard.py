@@ -631,8 +631,8 @@ def student_dashboard(request):
         "num_epiph_asserts": 0,
         "num_course_asserts": 0,
         "epiphany_badgeclass_id": "",
-        "username": "",
-        "useremail": ""
+        "username": user.username,
+        "useremail": user.email
     }
 
     pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions['result'])
