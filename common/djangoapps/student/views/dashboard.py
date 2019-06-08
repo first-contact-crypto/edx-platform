@@ -549,7 +549,7 @@ def log_if_raised(response, data=""):
     """
     Log server response if there was an error.
     """
-    LOG.info("BADGE_CLASS: In _log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
+    LOG.info("BADGE_CLASS: In log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
     try:
         response.raise_for_status()
     except HTTPError:
@@ -567,7 +567,7 @@ def get_headers():
     """
     Headers to send along with the request-- used for authentication.
     """
-    LOG.info("BADGE_CLASS: In _get_headers.. the BADGR_API_TOKEN is: {}".format(BADGR_ACCESS_TOKEN))
+    LOG.info("DASHBOARD: In _get_headers.. the BADGR_API_TOKEN is: {}".format(BADGR_ACCESS_TOKEN))
     ret = {
         'Authorization': 'Bearer ' + BADGR_ACCESS_TOKEN
           }
@@ -592,7 +592,7 @@ def student_dashboard(request):
 
     """
     user = request.user
-    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {0} the user.useremail is: {1}", user.username, user.email)
+    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {} the user.email is: {}", user.username, user.email)
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
@@ -605,7 +605,16 @@ def student_dashboard(request):
     badgr_assertions = response.json()
     LOG.info("DASHBOARD: In student_dashboard.. the response get_assertions badgr_server is: {0}", badgr_assertions)
 
-    LOG.info("DASHBOARD")
+    # this filters the assertions from badgr server to just this user
+    ba_tmp = badgr_assertions
+    for i in ba_tmp['result'].len():
+        ba = ba_tmp['result'][i]
+        if ba['recipient']['identity'] != user.email:
+            LOG.info("DASBOARD: In student_dashboard.. REMOVING un-needed assertion")
+            del badgr_assertions['result'][i]
+        else:
+            LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion for the user")
+
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
     LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result'])))
@@ -626,6 +635,7 @@ def student_dashboard(request):
 
     pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions['result'])
     pc_pkg['num_course_asserts'] = len(BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE).values())
+    LOG.info("DASHBOARD: In student_dashboard.. num_epiph_asserts: {} num_course_asserts: {}")
 
     if len(badgr_assertions['result']) == 0:
         for ea in edx_assertions:
@@ -636,15 +646,14 @@ def student_dashboard(request):
         ea_server_slug = None         
         for ea in edx_assertions:
             if matched == True:
-                # uses the ea from the last iteration to delete the ea record
+                # uses the ea from the last iteration to DELETE the ea record
+                LOG.info("DASHBOARD: In student_dashboard.. DELETING edx_assertion: {}".format("ea_server_slug"))
                 BadgeAssertion.objects.filter(user=user, slug='epiphany', badgr_server_slug=ea_server_slug).delete()
             matched = False
             ea_id = ea['user']['useremail']
             ea_server_slug = ea['badgr_server_slug']
             for i in len(badgr_assertions['result']):
                 ba = badgr_assertions['result'][i]
-                ba = badgr_assertions['result']
-                ba_id = ba['recipient']['identity']
                 ba_server_slug = ba['entityId']
                 if ba_server_slug == ea_server_slug:
                     matched = True
