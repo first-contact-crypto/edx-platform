@@ -634,7 +634,7 @@ def student_dashboard(request):
     else:
         matched = False
         ea_server_slug = None         
-        for i in len(edx_assertions['result']):
+        for i in edx_assertions.count():
             if matched == True:
                 # uses the ea from the last iteration to delete the ea record
                 BadgeAssertion.objects.filter(user=user, slug='epiphany', badgr_server_slug=ea_server_slug).delete()
