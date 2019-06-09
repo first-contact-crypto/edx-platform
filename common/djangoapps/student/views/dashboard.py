@@ -623,7 +623,7 @@ def student_dashboard(request):
         
         
     for i in to_delete:
-        del badgr_assertions['result'][to_delete[i]]
+        del badgr_assertions['result'][i]
 
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
