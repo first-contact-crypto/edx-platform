@@ -611,6 +611,7 @@ def student_dashboard(request):
     LOG.info("DASHBOARD: In student_dashboard.. the num of all ba_assertions is: {}".format(length))
     for i, ba in enumerate(ba_tmp['result']):
         ba_id = ba['recipient']['identity']
+        LOG.info("DASHBOARD In student_dashboard.. i: {} ba_id: {} user.email: {}".format(i, ba_id, user.email))
         if ba_id != user.email:
             LOG.info("DASBOARD: In student_dashboard.. REMOVING un-needed assertion recipient.identity: {} user.email: {}".format(ba_id, user.email))
             del badgr_assertions['result'][i]
