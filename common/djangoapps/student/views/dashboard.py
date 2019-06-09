@@ -613,7 +613,7 @@ def student_dashboard(request):
     filtered_badgr_assertions = []
 
     for a in badgr_assertions['result']:
-        if a.entityId != user.email:
+        if a['entityId'] != user.email:
             filtered_badgr_assertions.append(a.entityId)
 
     badgr_assertions['result'] = filtered_badgr_assertions
