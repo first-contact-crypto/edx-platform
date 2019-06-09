@@ -615,7 +615,7 @@ def student_dashboard(request):
             LOG.info("DASBOARD: In student_dashboard.. REMOVING un-needed assertion recipient.identity: {} user.email: {}".format(ba_id, user.email))
             del badgr_assertions['result'][i]
         else:
-            LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion for the user")
+            LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion to keep: ba_id: {} user.email {}".format(ba_id, user.email))
 
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))

@@ -33,6 +33,7 @@ MAX_SLUG_LENGTH = 255
 LOGGER = logging.getLogger(__name__)
 
 EPIPHANY_BADGR_SLUG = 'V_MaSinhQJeKGOtZz6tDAQ'
+COURSE_BADGR_SLUG = '2gnNK3RZSlOutOrVeQlD_A'
 BADGR_ISSUER_SLUG = 'rGy5MNWtQgSs1vfnLyPlmg'
 
 
@@ -252,7 +253,7 @@ class BadgrBackend(BadgeBackend):
 
 
         if assertion.badge_class.slug == 'course':
-            epiphany_badge_class = BadgeClass.objects.filter(badgr_server_slug='V_MaSinhQJeKGOtZz6tDAQ')
+            epiphany_badge_class = BadgeClass.objects.filter(badgr_server_slug=EPIPHANY_BADGR_SLUG)
             for i in 5:
                 _create_assertion(epiphany_badge_class, user, None)
 
