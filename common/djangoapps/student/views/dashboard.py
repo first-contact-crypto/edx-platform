@@ -614,7 +614,7 @@ def student_dashboard(request):
 
     for a in badgr_assertions['result']:
         if a['entityId'] != user.email:
-            filtered_badgr_assertions.append(a.entityId)
+            filtered_badgr_assertions.append(a['entityId'])
 
     badgr_assertions['result'] = filtered_badgr_assertions
 
