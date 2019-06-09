@@ -593,7 +593,8 @@ def student_dashboard(request):
 
     """
     user = request.user
-    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {} the user.email is: {}", user.username, user.email)
+    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {} user.email is: {}".format(user.username, user.email))
+
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
@@ -615,9 +616,10 @@ def student_dashboard(request):
     for a in badgr_assertions['result']:
         identity = a['recipient']['identity']
         LOG.info("DASHBOARD: In student_dashboard.. a['entityId']: {}, user.email: {}".format(identity, user.email))
-        if a['entityId'] != user.email:
+        if identity != user.email:
             filtered_badgr_assertions.append(a)
 
+    LOG.info('DASHBOARD: num filtered_badgr_assertions: {}'.format(len(filtered_badgr_assertions)))
     badgr_assertions['result'] = filtered_badgr_assertions
     LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions num is: {}, badgr_assertions['result']: {}".format(len(badgr_assertions['result']), badgr_assertions['result']))
 
