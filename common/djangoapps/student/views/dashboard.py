@@ -609,7 +609,8 @@ def student_dashboard(request):
     ba_tmp = badgr_assertions
     length = len(ba_tmp['result'])
     LOG.info("DASHBOARD: In student_dashboard.. the num of all ba_assertions is: {}".format(length))
-    for i, ba in range(length), ba_tmp['result']:
+    i = 0
+    for ba in ba_tmp['result']:
         ba_id = ba['recipient']['identity']
         LOG.info("DASHBOARD In student_dashboard.. i: {} ba_id: {} user.email: {}".format(i, ba_id, user.email))
         if ba_id != user.email:
@@ -617,6 +618,7 @@ def student_dashboard(request):
             del badgr_assertions['result'][i]
         else:
             LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion to keep i: {} ba_id: {} user.email {}".format(i, ba_id, user.email))
+        i += 1
 
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
