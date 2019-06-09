@@ -597,7 +597,7 @@ def student_dashboard(request):
         return redirect(reverse('account_settings'))
 
     edx_assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
-    LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions are: {}".format(edx_assertions))
+    LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions are: {}".format(edx_assertions.values()))
     LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
@@ -609,14 +609,14 @@ def student_dashboard(request):
     ba_tmp = badgr_assertions
     length = len(ba_tmp['result'])
     LOG.info("DASHBOARD: In student_dashboard.. the num of all ba_assertions is: {}".format(length))
-    for i, ba in enumerate(ba_tmp['result']):
+    for i, ba in range(length), ba_tmp['result']:
         ba_id = ba['recipient']['identity']
         LOG.info("DASHBOARD In student_dashboard.. i: {} ba_id: {} user.email: {}".format(i, ba_id, user.email))
         if ba_id != user.email:
-            LOG.info("DASBOARD: In student_dashboard.. REMOVING un-needed assertion recipient.identity: {} user.email: {}".format(ba_id, user.email))
+            LOG.info("DASBOARD: In student_dashboard.. REMOVING un-needed assertion i: {}, recipient.identity: {} user.email: {}".format(i, ba_id, user.email))
             del badgr_assertions['result'][i]
         else:
-            LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion to keep: ba_id: {} user.email {}".format(ba_id, user.email))
+            LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion to keep i: {} ba_id: {} user.email {}".format(i, ba_id, user.email))
 
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
@@ -626,7 +626,6 @@ def student_dashboard(request):
     num_course_asserts = 0
 
     epiph_slug = None
-    # delete_list = [a.server_slug for a in assertions]
 
     pc_pkg = {
         "num_epiph_asserts": 0,
