@@ -226,11 +226,11 @@ class BadgrBackend(BadgeBackend):
         """
         Register an assertion with the Badgr server for a particular user for a specific class.
         """
-        
+
         LOGGER.info("BADGE_CLASS: In _create_assertion.. the user.username;user.email is: {} ~~ {}".format(user.username, user.email))
         data = {
             'recipient': {
-                'identity': user.email
+                'identity': user.email,
                 'type': 'email',
                 'hashed': False,
                 'plaintextIdentity': user.username
