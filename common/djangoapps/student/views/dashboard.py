@@ -68,7 +68,7 @@ from badges.backends.badgr import BadgrBackend
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = 'wOFWgXg3Gv1t4TWsEy1FJjWkSZSn4A'
+BADGR_ACCESS_TOKEN = 'Jk4K0I5RtotHTqwy7fRb1vAipfFECU'
 BADGR_SERVER_SLUG_EPIPHANY = "V_MaSinhQJeKGOtZz6tDAQ"
 BADGR_SERVER_SLUG_COURSE = "2gnNK3RZSlOutOrVeQlD_A"
 
@@ -598,12 +598,12 @@ def student_dashboard(request):
 
     edx_assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions are: {}".format(edx_assertions))
-
+    LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
     badgr_assertions = response.json()
-    LOG.info("DASHBOARD: In student_dashboard.. the response get_assertions badgr_server is: {0}", badgr_assertions)
+    LOG.info("DASHBOARD: In student_dashboard.. the response get_assertions badgr_server is: {}".format(badgr_assertions))
 
     # this filters the assertions from badgr server to just this user
     ba_tmp = badgr_assertions
@@ -637,7 +637,7 @@ def student_dashboard(request):
 
     pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions['result'])
     pc_pkg['num_course_asserts'] = len(BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE).values())
-    LOG.info("DASHBOARD: In student_dashboard.. num_epiph_asserts: {} num_course_asserts: {}")
+    LOG.info("DASHBOARD: In student_dashboard.. num_epiph_asserts: {} num_course_asserts: {}".format(pc_pkg['num_epiph_asserts'], pc_pkg['num_course_asserts']))
 
     if len(badgr_assertions['result']) == 0:
         for ea in edx_assertions:
