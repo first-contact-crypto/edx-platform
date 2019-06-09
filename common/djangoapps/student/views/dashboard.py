@@ -619,9 +619,9 @@ def student_dashboard(request):
             filtered_badgr_assertions.append(a)
 
     badgr_assertions['result'] = filtered_badgr_assertions
-    LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions num is: {}, badgr_assertions['result']: {}".format(badgr_assertions['result'].count(), badgr_assertions['result']))
+    LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions num is: {}, badgr_assertions['result']: {}".format(len(badgr_assertions['result']), badgr_assertions['result']))
 
-    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
+    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(len(edx_assertions)))
     LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result'])))
 
     num_epiph_asserts = 0
