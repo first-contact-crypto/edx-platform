@@ -619,26 +619,7 @@ def student_dashboard(request):
             filtered_badgr_assertions.append(a)
 
     badgr_assertions['result'] = filtered_badgr_assertions
-    LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions['result']: {}".format(badgr_assertions['result']))
-
-        
-    # i = 0
-    # to_delete = []
-    # for ba in badgr_assertions['result']:
-    #     ba_id = ba['recipient']['identity']
-    #     LOG.info("DASHBOARD In student_dashboard.. i: {} ba_id: {} user.email: {}".format(i, ba_id, user.email))
-    #     if ba_id != user.email:
-    #         LOG.info("DAShBOARD: In student_dashboard.. REMOVING un-needed assertion i: {}, recipient.identity: {} user.email: {}".format(i, ba_id, user.email))
-    #         to_delete.append(i)
-    #     else:
-    #         LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion to keep i: {} ba_id: {} user.email {}".format(i, ba_id, user.email))
-    #     i += 1
-        
-        
-    # for i in to_delete:
-    #     LOG.info("DASHBOARD In student_dashboard.. The fuck idx is out MF MF MF: {}".format(i))
-    #     del badgr_assertions['result'][i]
-
+    LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions num is: {}, badgr_assertions['result']: {}".format(badgr_assertions['result'].count(), badgr_assertions['result']))
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
     LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result'])))
@@ -683,7 +664,7 @@ def student_dashboard(request):
                     matched = True
 
     ea_new_assertion_cnt = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY).count()
-    LOG.info("DASHBOARD: In student_dashboard.. the new edx_assertion_cnt is: {}".format(ea_new_assertion_cnt))
+    LOG.info("DASHBOARD: In student_dashboard.. the NEW edx_assertion_cnt is: {}".format(ea_new_assertion_cnt))
 
     pc_pkg_str = json.dumps(pc_pkg)
 
