@@ -609,21 +609,32 @@ def student_dashboard(request):
     # this filters the assertions from badgr server to just this user
     length = len(badgr_assertions['result'])
     LOG.info("DASHBOARD: In student_dashboard.. the num of all ba_assertions is: {}".format(length))
-    i = 0
-    to_delete = []
-    for ba in badgr_assertions['result']:
-        ba_id = ba['recipient']['identity']
-        LOG.info("DASHBOARD In student_dashboard.. i: {} ba_id: {} user.email: {}".format(i, ba_id, user.email))
-        if ba_id != user.email:
-            LOG.info("DASBOARD: In student_dashboard.. REMOVING un-needed assertion i: {}, recipient.identity: {} user.email: {}".format(i, ba_id, user.email))
-            to_delete.append(i)
-        else:
-            LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion to keep i: {} ba_id: {} user.email {}".format(i, ba_id, user.email))
-        i += 1
+
+    filtered_badgr_assertions = []
+
+    for a in badgr_assertions['result']:
+        if a.entityId != user.email:
+            filtered_badgr_assertions.append(a.entityId)
+
+    badgr_assertions['result'] = filtered_badgr_assertions
+
+        
+    # i = 0
+    # to_delete = []
+    # for ba in badgr_assertions['result']:
+    #     ba_id = ba['recipient']['identity']
+    #     LOG.info("DASHBOARD In student_dashboard.. i: {} ba_id: {} user.email: {}".format(i, ba_id, user.email))
+    #     if ba_id != user.email:
+    #         LOG.info("DAShBOARD: In student_dashboard.. REMOVING un-needed assertion i: {}, recipient.identity: {} user.email: {}".format(i, ba_id, user.email))
+    #         to_delete.append(i)
+    #     else:
+    #         LOG.info("DASHBOARD: In student_dashboard.. FOUND an assertion to keep i: {} ba_id: {} user.email {}".format(i, ba_id, user.email))
+    #     i += 1
         
         
-    for i in to_delete:
-        del badgr_assertions['result'][i]
+    # for i in to_delete:
+    #     LOG.info("DASHBOARD In student_dashboard.. The fuck idx is out MF MF MF: {}".format(i))
+    #     del badgr_assertions['result'][i]
 
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
