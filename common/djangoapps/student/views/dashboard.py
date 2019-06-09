@@ -613,9 +613,10 @@ def student_dashboard(request):
     filtered_badgr_assertions = []
 
     for a in badgr_assertions['result']:
-        LOG.info("DASHBOARD: In student_dashboard.. a['entityId']: {}, user.email: {}".format(a['entityId'], user.email))
+        identity = a['recipient']['identity']
+        LOG.info("DASHBOARD: In student_dashboard.. a['entityId']: {}, user.email: {}".format(identity, user.email))
         if a['entityId'] != user.email:
-            filtered_badgr_assertions.append(a['entityId'])
+            filtered_badgr_assertions.append(a)
 
     badgr_assertions['result'] = filtered_badgr_assertions
     LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions['result']: {}".format(badgr_assertions['result']))
