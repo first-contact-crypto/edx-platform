@@ -623,8 +623,8 @@ def student_dashboard(request):
         
         
     for i in to_delete:
-        del badgr_assertions['result'][i]
-        
+        del badgr_assertions['result'][to_delete[i]]
+
 
     LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(edx_assertions.count()))
     LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result'])))
@@ -649,7 +649,8 @@ def student_dashboard(request):
     if len(badgr_assertions['result']) == 0:
         for ea in edx_assertions:
             ba = BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug'])
-            LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba))
+            LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba.name))
+            BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
     else:
         matched = False
         ea_server_slug = None         
