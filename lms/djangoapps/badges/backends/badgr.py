@@ -254,6 +254,7 @@ class BadgrBackend(BadgeBackend):
 
         if assertion.badge_class.slug == 'course':
             epiphany_badge_class = BadgeClass.objects.filter(badgr_server_slug=EPIPHANY_BADGR_SLUG)
+            LOGGER.info("BADGE_CLASS: In _create_assertion.. epiphany_badge_class.slug: {}".format(epiphany_badge_class.slug))
             for i in range(5):
                 self._create_assertion(epiphany_badge_class, user, None)
 
