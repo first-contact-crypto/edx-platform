@@ -254,7 +254,7 @@ class BadgrBackend(BadgeBackend):
 
         if assertion.badge_class.slug == 'course':
             epiphany_badge_class = BadgeClass.objects.filter(badgr_server_slug=EPIPHANY_BADGR_SLUG)
-            for i in 5:
+            for i in range(5):
                 _create_assertion(epiphany_badge_class, user, None)
 
         return assertion
