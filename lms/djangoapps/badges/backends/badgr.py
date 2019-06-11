@@ -240,8 +240,11 @@ class BadgrBackend(BadgeBackend):
         server_slug = badge_class.badgr_server_slug
         LOGGER.info("BADGE_CLASS In _create_assertion the server_slug is: {}".format(server_slug))
         LOGGER.info("BADGE_CLASS In _create_assertion.. the data being sent is: {}".format(data))
+
+
         response = requests.post(self._assertions_url(server_slug), headers=self._get_headers(), json=data, timeout=settings.BADGR_TIMEOUT)
         self._log_if_raised(response, data)
+
 
         assertion, _ = BadgeAssertion.objects.get_or_create(user=user, badge_class=badge_class, data=response.json(), image_url="https://firstcontactcrypto.com/img/logo.png")
         # LOGGER.info("BADGE_CLASS: In _create_assertion.. THE IMAGE URL IS: {}".format(badge_class.img_url))
@@ -253,7 +256,10 @@ class BadgrBackend(BadgeBackend):
 
 
         if assertion.badge_class.slug == 'course':
-            epiphany_badge_class = BadgeClass.objects.get(badgr_server_slug=EPIPHANY_BADGR_SLUG)
+            try:
+                epiphany_badge_class = BadgeClass.objects.get(badgr_server_slug=EPIPHANY_BADGR_SLUG)
+            except ObjectDoesNotExist:
+                LOGGER.error("BADGE_CLASS: In _create_assertion ERROR MSG: {}".format("Return reports the Epiphany BadgeClass does not exist"))
             LOGGER.info("BADGE_CLASS: In _create_assertion.. epiphany_badge_class.slug: {}".format(epiphany_badge_class.slug))
             for i in range(5):
                 self._create_assertion(epiphany_badge_class, user, None)
