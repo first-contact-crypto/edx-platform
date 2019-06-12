@@ -669,7 +669,7 @@ def student_dashboard(request):
 
     ### EPIPHANY ###
     if len(badgr_assertions_epiphany['result']) == 0:
-        for ea in edx_assertions_epiphany_epiphany:
+        for ea in edx_assertions_epiphany:
             ba = BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug'])
             LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba.name))
             BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
