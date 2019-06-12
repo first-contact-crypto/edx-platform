@@ -598,33 +598,55 @@ def student_dashboard(request):
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
 
-    edx_assertions = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
-    LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions are: {}".format(edx_assertions.values()))
+
+    ### EPIPHANY ###
+    edx_assertions_epiphany = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
+    LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
     LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
+    
     response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
-    badgr_assertions = response.json()
-    LOG.info("DASHBOARD: In student_dashboard.. the response get_assertions badgr_server is: {}".format(badgr_assertions))
+    badgr_assertions_epiphany = response.json()
+    LOG.info("DASHBOARD: In student_dashboard.. the response get_assertions badgr_server is: {}".format(badgr_assertions_epiphany))
 
     # this filters the assertions from badgr server to just this user
-    length = len(badgr_assertions['result'])
+    length = len(badgr_assertions_epiphany['result'])
     LOG.info("DASHBOARD: In student_dashboard.. the num of all ba_assertions is: {}".format(length))
 
-    filtered_badgr_assertions = []
+    filtered_badgr_assertions_epiphany = []
 
-    for a in badgr_assertions['result']:
+    for a in badgr_assertions_epiphany['result']:
         identity = a['recipient']['identity']
         LOG.info("DASHBOARD: In student_dashboard.. a['entityId']: {}, user.email: {}".format(identity, user.email))
         if identity == user.email:
-            filtered_badgr_assertions.append(a)
+            filtered_badgr_assertions_epiphany.append(a)
 
-    LOG.info('DASHBOARD: num filtered_badgr_assertions: {}'.format(len(filtered_badgr_assertions)))
-    badgr_assertions['result'] = filtered_badgr_assertions
-    LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions num is: {}, badgr_assertions['result']: {}".format(len(badgr_assertions['result']), badgr_assertions['result']))
+    LOG.info('DASHBOARD: num filtered_badgr_assertions_epiphany: {}'.format(len(filtered_badgr_assertions_epiphany)))
+    badgr_assertions_epiphany['result'] = filtered_badgr_assertions_epiphany
+    LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions_epiphany num is: {}, badgr_assertions_epiphany['result']: {}".format(len(badgr_assertions_epiphany['result']), badgr_assertions_epiphany['result']))
 
-    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions is: {}".format(len(edx_assertions)))
-    LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions is: {}".format(len(badgr_assertions['result'])))
+    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions_epiphany is: {}".format(len(edx_assertions_epiphany)))
+    LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions_epiphany is: {}".format(len(badgr_assertions_epiphany['result'])))
+
+
+    ## COURSE ###
+    edx_assertions_course = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE)
+    response = requests.get('https://api.badgr.io/v2/badgeclasses/2gnNK3RZSlOutOrVeQlD_A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
+    log_if_raised(response)
+
+    badgr_assertions_course = response.json()
+    length = len(badgr_assertions_course['result'])
+    filtered_badgr_assertions_course = []
+    for a in badgr_assertions_course['result']:
+        identity = a['recipient']['identity']
+        if identity == user.email:
+            filtered_badgr_assertions_course.append(a)
+    badgr_assertions_course['result'] = filtered_badgr_assertions_course
+
+
+
+    ### OBJECT ###
 
     num_epiph_asserts = 0
     num_course_asserts = 0
@@ -639,21 +661,22 @@ def student_dashboard(request):
         "useremail": user.email
     }
 
-    pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions['result'])
-
-    pc_pkg['num_course_asserts'] = len(BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE).values())
+    pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions_epiphany['result'])
+    pc_pkg['num_course_asserts'] = num_course_asserts = len(badgr_assertions_course['result'])
     
     LOG.info("DASHBOARD: In student_dashboard.. num_epiph_asserts: {} num_course_asserts: {}".format(pc_pkg['num_epiph_asserts'], pc_pkg['num_course_asserts']))
+    ### OBJECT ###
 
-    if len(badgr_assertions['result']) == 0:
-        for ea in edx_assertions:
+    ### EPIPHANY ###
+    if len(badgr_assertions_epiphany['result']) == 0:
+        for ea in edx_assertions_epiphany_epiphany:
             ba = BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug'])
             LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba.name))
             BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
     else:
         matched = False
         ea_server_slug = None         
-        for ea in edx_assertions:
+        for ea in edx_assertions_epiphany:
             if matched == True:
                 # uses the ea from the last iteration to DELETE the ea record
                 LOG.info("DASHBOARD: In student_dashboard.. DELETING edx_assertion: {}".format("ea_server_slug"))
@@ -661,16 +684,51 @@ def student_dashboard(request):
             matched = False
             ea_id = ea['user']['useremail']
             ea_server_slug = ea['badgr_server_slug']
-            for i in len(badgr_assertions['result']):
-                ba = badgr_assertions['result'][i]
+            for i in len(badgr_assertions_epiphany['result']):
+                ba = badgr_assertions_epiphany['result'][i]
                 ba_server_slug = ba['entityId']
                 if ba_server_slug == ea_server_slug:
                     matched = True
+
+
+    ### COURSE ###
+    if len(badgr_assertions_course['result']) == 0:
+        for ea in edx_assertions_course:
+            ba = BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug'])
+            LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba.name))
+            BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
+    else:
+        matched = False
+        ea_server_slug = None         
+        for ea in edx_assertions_course:
+            if matched == True:
+                # uses the ea from the last iteration to DELETE the ea record
+                LOG.info("DASHBOARD: In student_dashboard.. DELETING edx_assertion: {}".format("ea_server_slug"))
+                BadgeAssertion.objects.filter(user=user, slug='course', badgr_server_slug=ea_server_slug).delete()
+            matched = False
+            ea_id = ea['user']['useremail']
+            ea_server_slug = ea['badgr_server_slug']
+            for i in len(badgr_assertions_course['result']):
+                ba = badgr_assertions_course['result'][i]
+                ba_server_slug = ba['entityId']
+                if ba_server_slug == ea_server_slug:
+                    matched = True
+
+
+
+
+
+
+
+
+
 
     ea_new_assertion_cnt = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY).count()
     LOG.info("DASHBOARD: In student_dashboard.. the NEW edx_assertion_cnt is: {}".format(ea_new_assertion_cnt))
 
     pc_pkg_str = json.dumps(pc_pkg)
+
+    ### END ###
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
