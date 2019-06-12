@@ -640,7 +640,9 @@ def student_dashboard(request):
     }
 
     pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions['result'])
+
     pc_pkg['num_course_asserts'] = len(BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE).values())
+    
     LOG.info("DASHBOARD: In student_dashboard.. num_epiph_asserts: {} num_course_asserts: {}".format(pc_pkg['num_epiph_asserts'], pc_pkg['num_course_asserts']))
 
     if len(badgr_assertions['result']) == 0:
