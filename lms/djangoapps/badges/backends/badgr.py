@@ -107,14 +107,14 @@ class BadgrBackend(BadgeBackend):
         
         return response.status_code
 
-    # NEW
+
     def _badgeclasses_url(self, issuer_slug=BADGR_ISSUER_SLUG):
         """
         Badge Class centric functionality.
         """
         return "{}/issuers/{}/badgeclasses".format(self._base_url, issuer_slug)
 
-        # NEW
+
 
     def _assertions_url(self, badge_slug):
         """
