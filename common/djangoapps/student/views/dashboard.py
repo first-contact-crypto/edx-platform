@@ -69,13 +69,13 @@ from badges.backends.badgr import BadgrBackend
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = '3OiFPe9afi6mjMTo0bginiQPuZG69h'
+BADGR_ACCESS_TOKEN = 'zwVxFzvEzcogGQFQi1ZyDS93g6psEx'
 BADGR_SERVER_SLUG_EPIPHANY = "V_MaSinhQJeKGOtZz6tDAQ"
 BADGR_SERVER_SLUG_COURSE = "2gnNK3RZSlOutOrVeQlD_A"
 
 def get_org_black_and_whitelist_for_site():
     """
-    Returns the org blacklist and whitelist for the current site.
+    Returns the org blacklist and whitelist for the current site.~
 
     Returns:
         (org_whitelist, org_blacklist): A tuple of lists of orgs that serve as
