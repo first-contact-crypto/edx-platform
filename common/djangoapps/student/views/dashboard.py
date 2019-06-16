@@ -604,7 +604,7 @@ def student_dashboard(request):
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
     LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
     
-    response = requests.get('https://api.badgr.io/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
+    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
     badgr_assertions_epiphany = response.json()
@@ -632,7 +632,7 @@ def student_dashboard(request):
 
     ## COURSE ###
     edx_assertions_course = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE)
-    response = requests.get('https://api.badgr.io/v2/badgeclasses/2gnNK3RZSlOutOrVeQlD_A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
+    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/2gnNK3RZSlOutOrVeQlD_A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
     badgr_assertions_course = response.json()

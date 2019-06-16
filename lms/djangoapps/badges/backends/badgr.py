@@ -126,7 +126,7 @@ class BadgrBackend(BadgeBackend):
         """
         Get a new access token using the refresh token. Get and set from settings.
         """
-        return "https://api.badgr.io/o/token".format(self._base_url)
+        return "https://badgr.firstcontactcrypto.com/o/token".format(self._base_url)
 
     def _slugify(self, badge_class):
         """
