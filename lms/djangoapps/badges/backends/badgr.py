@@ -1,10 +1,10 @@
 """
 Badge Awarding backend for Badgr-Server.
 
-EPIPHANY BADGE SERVER SLUG: V_MaSinhQJeKGOtZz6tDAQ
+EPIPHANY BADGE SERVER SLUG: CM-sak0wQuCty2BfSEle3A
 IMAGE: https://media.us.badgr.io/uploads/badges/issuer_badgeclass_efc20af1-7d43-4d1e-877e-447244ea3fd3.png
 
-COURSE BADGE SERVER SLUG: 2gnNK3RZSlOutOrVeQlD_A
+COURSE BADGE SERVER SLUG: RBNmTgTUTQC4o_0-yDIA4g
 IMAGE: https://media.us.badgr.io/uploads/badges/issuer_badgeclass_63237c1a-3f3d-40b7-9e48-085658d2799f.png
 
 REDEMPTION BADGE SERVER SLUG: XrG4QUcyTQGVch1VipS-Qw
@@ -32,8 +32,8 @@ from eventtracking import tracker
 MAX_SLUG_LENGTH = 255
 LOGGER = logging.getLogger(__name__)
 
-EPIPHANY_BADGR_SLUG = 'V_MaSinhQJeKGOtZz6tDAQ'
-COURSE_BADGR_SLUG = '2gnNK3RZSlOutOrVeQlD_A'
+EPIPHANY_BADGR_SLUG = 'CM-sak0wQuCty2BfSEle3A'
+COURSE_BADGR_SLUG = 'RBNmTgTUTQC4o_0-yDIA4g'
 BADGR_ISSUER_SLUG = 'rGy5MNWtQgSs1vfnLyPlmg'
 
 
@@ -167,10 +167,10 @@ class BadgrBackend(BadgeBackend):
         """
         Create the badge class on Badgr.        
         
-        EPIPHANY BADGE SERVER SLUG: V_MaSinhQJeKGOtZz6tDAQ
+        EPIPHANY BADGE SERVER SLUG: CM-sak0wQuCty2BfSEle3A
         IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_efc20af1 - 7d43 - 4d1e - 877e-447244ea3fd3.png
 
-        COURSE BADGE SERVER SLUG: 2gnNK3RZSlOutOrVeQlD_A
+        COURSE BADGE SERVER SLUG: RBNmTgTUTQC4o_0-yDIA4g
         IMAGE: https: // media.us.badgr.io / uploads / badges / issuer_badgeclass_63237c1a - 3f3d - 40b7 - 9e48 - 085658d2799f.png
         """
 
@@ -180,7 +180,7 @@ class BadgrBackend(BadgeBackend):
         image_url = None
 
         if badge_class.slug == 'course':
-            server_slug = '2gnNK3RZSlOutOrVeQlD_A'
+            server_slug = 'RBNmTgTUTQC4o_0-yDIA4g'
             image_url = 'https//media.us.badgr.io/uploads/badges/issuer_badgeclass_63237c1a-3f3d-40b7-9e48-085658d2799f.png'
             # GET BADGR IMAGE
             image = requests.get(image_url, timeout=settings.BADGR_TIMEOUT)
@@ -188,7 +188,7 @@ class BadgrBackend(BadgeBackend):
                 f.write(image)
             badge_class.image = models.ImageField('badgr/images/course-badge.png')
         else:
-            server_slug = 'V_MaSinhQJeKGOtZz6tDAQ'
+            server_slug = 'CM-sak0wQuCty2BfSEle3A'
             image_url = 'https://media.us.badgr.io/uploads/badges/issuer_badgeclass_efc20af1-7d43-4d1e-877e-447244ea3fd3.png'
             # GET BADGR IMAGE
             image = requests.get(image_url, timeout=settings.BADGR_TIMEOUT)

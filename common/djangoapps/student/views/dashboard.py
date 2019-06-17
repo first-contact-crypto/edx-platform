@@ -70,8 +70,8 @@ from badges.backends.badgr import BadgrBackend
 LOG = logging.getLogger("edx.student")
 
 BADGR_ACCESS_TOKEN = 'R5YcxeiCfPofT2OFKnrnS2VQFb0em3'
-BADGR_SERVER_SLUG_EPIPHANY = "V_MaSinhQJeKGOtZz6tDAQ"
-BADGR_SERVER_SLUG_COURSE = "2gnNK3RZSlOutOrVeQlD_A"
+BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
+BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
 
 def get_org_black_and_whitelist_for_site():
     """
@@ -604,7 +604,7 @@ def student_dashboard(request):
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
     LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
     
-    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/V_MaSinhQJeKGOtZz6tDAQ/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
+    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/CM-sak0wQuCty2BfSEle3A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
     badgr_assertions_epiphany = response.json()
@@ -632,7 +632,7 @@ def student_dashboard(request):
 
     ## COURSE ###
     edx_assertions_course = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE)
-    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/2gnNK3RZSlOutOrVeQlD_A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
+    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/RBNmTgTUTQC4o_0-yDIA4g/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
     badgr_assertions_course = response.json()
