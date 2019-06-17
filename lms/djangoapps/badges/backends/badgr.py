@@ -34,7 +34,7 @@ LOGGER = logging.getLogger(__name__)
 
 EPIPHANY_BADGR_SLUG = 'CM-sak0wQuCty2BfSEle3A'
 COURSE_BADGR_SLUG = 'RBNmTgTUTQC4o_0-yDIA4g'
-BADGR_ISSUER_SLUG = 'rGy5MNWtQgSs1vfnLyPlmg'
+BADGR_ISSUER_SLUG = 'MC67oN42TPm9VARGW7TmKw'
 
 
 class BadgrBackend(BadgeBackend):
