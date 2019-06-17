@@ -35,6 +35,7 @@ LOGGER = logging.getLogger(__name__)
 EPIPHANY_BADGR_SLUG = 'CM-sak0wQuCty2BfSEle3A'
 COURSE_BADGR_SLUG = 'RBNmTgTUTQC4o_0-yDIA4g'
 BADGR_ISSUER_SLUG = 'MC67oN42TPm9VARGW7TmKw'
+BADGR_BASE_URL = 'https://badgr.firstcontactcrypto.com/'
 
 
 class BadgrBackend(BadgeBackend):
@@ -56,8 +57,8 @@ class BadgrBackend(BadgeBackend):
         """
         Base URL for all API requests.
         """
-        LOGGER.info("BADGE_CLASS: In _base_url.. the settings.BADGR_BASE_URL is: {}".format(settings.BADGR_BASE_URL))
-        return "{}/v2".format(settings.BADGR_BASE_URL)
+        LOGGER.info("BADGE_CLASS: In _base_url.. the BADGR_BASE_URL is: {}".format(BADGR_BASE_URL))
+        return "{}/v2".format(BADGR_BASE_URL)
 
     @property
     def access_token(self):
@@ -305,10 +306,10 @@ class BadgrBackend(BadgeBackend):
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE RESPONSE STATUS CODE FROM BADGR SERVER IS BAD: {}".format(status_code))
             # LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. THE REPONSE HEADER IS: {}".format(response.headers)
             LOGGER.info("BADGE_CLASS: In _ensure_badge_created .. Trying refresh access token now...")
-            ret_code = self._get_new_access_token(badge_class)
-            if not ret_code == 200:
-                LOGGER.error("BADGR.PY: In _ensure_badge_created.. ERROR: Could not refresh the badgr token!")
-                return
+            # ret_code = self._get_new_access_token(badge_class)
+            # if not ret_code == 200:
+            #     LOGGER.error("BADGR.PY: In _ensure_badge_created.. ERROR: Could not refresh the badgr token!")
+            #     return
         LOGGER.info("BADGE_CLASS: In _ensure_badge_created ..calling BadgrBackend.badges_append(slug) NOW!.. LEAVING _ensure_badge_created")
 
 
