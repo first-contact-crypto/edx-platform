@@ -6,26 +6,26 @@
 <table width="100%" align="left" border="0" cellpadding="0" cellspacing="0" role="presentation">
     <tr>
         <td>
-            <h1>
-                {% blocktrans %}You have been invited to {{ course_name }}{% endblocktrans %}
-            </h1>
-
+           <h3>
+                <p style="font-weight: bold">Calling all friends,</p>
+            </h3> 
+    
             <p style="color: rgba(0,0,0,.75);">
-                {% blocktrans %}You have been invited to join {{ course_name }} at {{ site_name }} by a member of the course staff.{% endblocktrans %}
+                {% blocktrans %}You have been invited to join the alpha testing group for the First Contact Crypto training platform by Peter Alexander and Jason Hartgrave.  Please enjoy our first test course called {{ course_name }}. {% endblocktrans %}
                 <br />
             </p>
 
         {% if is_shib_course %}
             {% if auto_enroll %}
                 <p style="color: rgba(0,0,0,.75);">
-                    {% blocktrans %}To access this course click on the button below and login:{% endblocktrans %}
+                    {% blocktrans %}To access this course click the link below and login:{% endblocktrans %}
                     <br />
                 </p>
 
                 {% include "ace_common/edx_ace/common/return_to_course_cta.html" with course_cta_text=course_name course_cta_url=course_url %}
             {% elif course_about_url is not None %}
                 <p style="color: rgba(0,0,0,.75);">
-                    {% blocktrans %}To access this course visit it and register:{% endblocktrans %}
+                    {% blocktrans %}To access this free learn and earn crypto course visit it and register:{% endblocktrans %}
                     <br />
                 </p>
 
@@ -39,12 +39,12 @@
 
             {% trans "Finish Your Registration" as button_cta_text %}
             {% include "ace_common/edx_ace/common/return_to_course_cta.html" with course_cta_text=button_cta_text course_cta_url=registration_url %}
-
+            <br />
             <p style="color: rgba(0,0,0,.75);">
                 {% if auto_enroll %}
-                    {% blocktrans %}Once you have registered and activated your account, you will see {{ course_name }} listed on your dashboard.{% endblocktrans %}
+                    {% blocktrans %}Once you have registered your account, you will see {{ course_name }} listed on your dashboard. Watch the welcome message at the top of the screen and then click the view course button to start your learning adventure! {% endblocktrans %}
                 {% elif course_about_url is not None %}
-                    {% blocktrans %}Once you have registered and activated your account, you will be able to access this course:{% endblocktrans %}
+                    {% blocktrans %}Once you have registered your account, you will see {{ course_name }} listed on your dashboard. Watch the welcome message at the top of the screen and then click the view course button to start your learning adventure!{% endblocktrans %}
                     {% include "ace_common/edx_ace/common/return_to_course_cta.html" with course_cta_text=course_name course_cta_url=course_about_url %}
                 {% else %}
                     {% blocktrans %}You can then enroll in {{ course_name }}.{% endblocktrans %}
@@ -53,7 +53,7 @@
             </p>
         {% endif %}
             <p style="color: rgba(0,0,0,.75);">
-                {% blocktrans %}This email was automatically sent from {{ site_name }} to {{ email_address }}{% endblocktrans %}
+                {% blocktrans %}This email was automatically sent from VIP First Contact Mission Control to {{ email_address }}{% endblocktrans %}
                 <br />
             </p>
         </td>
