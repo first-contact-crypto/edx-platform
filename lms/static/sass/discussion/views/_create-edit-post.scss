@@ -139,7 +139,8 @@
 
 // CASE: inline styling
 .discussion-module .forum-new-post-form {
-  background: $forum-color-background;
+  background: $inverse;
+  color: $primary;
 }
 
 // ====================
