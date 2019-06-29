@@ -19,7 +19,7 @@ function LoggedOutUser({ platformName, loginQuery, supportEmail }) {
 
       <div className="row">
         <div className="col-sm-12">
-          <a href={`/login${loginQuery}`} className="btn btn-primary btn-signin">{gettext('Sign in')}</a>
+          <a href={`/login${loginQuery}`} className="btn btn-outline-success  btn-signin">{gettext('Sign in')}</a>
         </div>
       </div>
 

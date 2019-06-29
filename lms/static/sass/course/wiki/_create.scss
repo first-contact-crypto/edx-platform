@@ -15,6 +15,8 @@ form#wiki_revision {
 
   .CodeMirror {
     @extend textarea;
+    background-color: $inverse;
+    color: $primary;
 
     @include box-sizing(border-box);
 
@@ -28,11 +30,15 @@ form#wiki_revision {
     margin-bottom: $baseline;
     min-height: 450px;
     width: 100%;
+    background-color: $inverse;
+    color: $primary;
   }
 
   input[type="text"] {
     display: block;
     width: 50%;
+    background-color: $inverse;
+    color: $primary;
   }
 
   #submit_delete {
@@ -51,18 +57,19 @@ form#wiki_revision {
 }
 
 #wiki_edit_instructions {
-  color: #666;
+  color: #111;
   float: left;
   margin-top: lh();
   width: flex-grid(3, 9);
 
   &:hover,
   &:focus {
-    color: #333;
+    color: #666;
   }
 
   .markdown-example {
-    background-color: #e3e3e3;
+    background-color: $inverse;
+    color: $primary;
     line-height: 1;
     margin: 5px 0 7px;
     padding: {
@@ -72,6 +79,6 @@ form#wiki_revision {
       left: 5px;
     }
 
-    text-shadow: 0 1px 0 #fff;
+    text-shadow: 0 1px 0 $inverse;
   }
 }

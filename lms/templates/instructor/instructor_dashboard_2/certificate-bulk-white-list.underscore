@@ -7,7 +7,7 @@
         <div class="customBrowseBtn">
             <label for="browseBtn-bulk-csv"><%- gettext("Upload a CSV file") %></label>
             <span class="browse-file enhanced-input-file" id="bulk-exception-upload"></span>
-            <div class="file-browse btn btn-primary" aria-hidden="true">
+            <div class="file-browse btn btn-outline-success " aria-hidden="true">
                 <span class="browse"><%- gettext("Browse") %></span>
                 <input class="file_field" id="browseBtn-bulk-csv" name="students_list" type="file" accept=".csv"/>
             </div>

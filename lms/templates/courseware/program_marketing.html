@@ -328,11 +328,11 @@ endorser_org = endorser_position.get('organization_name') or corporate_endorseme
           % if program.get('is_learner_eligible_for_one_click_purchase') != True:
             % if course_run['is_enrollment_open'] and course_run['can_enroll'] and not course_run['is_course_ended']:
               <div>
-                <a class="btn btn-primary btn-block btn-success" href="${course_purchase_url}">Enroll Now</a>
+                <a class="btn btn-outline-success  btn-block btn-success" href="${course_purchase_url}">Enroll Now</a>
               </div>
             % else:
               <div>
-                <a class="btn btn-primary btn-block btn-secondary disabled" href="#" >Not Currently Available</a>
+                <a class="btn btn-outline-success  btn-block btn-secondary disabled" href="#" >Not Currently Available</a>
               </div>
             % endif
           % endif
