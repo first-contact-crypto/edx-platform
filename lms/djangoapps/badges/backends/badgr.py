@@ -145,6 +145,7 @@ class BadgrBackend(BadgeBackend):
             slug = hashlib.sha256(slug).hexdigest()
         return slug
 
+        
     def _log_if_raised(self, response, data):
         """
         Log server response if there was an error.
