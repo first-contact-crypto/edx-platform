@@ -1,10 +1,16 @@
 // discussion - utilities - variables
 // ====================
 
+$inverse: black;
+$primary: white;
+$success: green;
+
 // base color variables
-$forum-color-primary: palette(primary, base) !default;
+// $forum-color-primary: palette(primary, base) !default;
+$forum-color-primary: $primary;
 $forum-color-copy-light: palette(grayscale, base) !default;
-$forum-color-background-light: palette(grayscale, x-back) !default;
+// $forum-color-background-light: palette(grayscale, x-back) !default;
+$forum-color-background-light: $inverse;
 
 // contextual color variables
 $forum-color-background: $lms-container-background-color !default;
