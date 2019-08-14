@@ -2,9 +2,13 @@
 Dashboard view and supporting methods
 """
 
+import json
 import datetime
 import logging
+import requests
+import copy
 from collections import defaultdict
+from requests.packages.urllib3.exceptions import HTTPError
 
 from completion.exceptions import UnavailableCompletionData
 from completion.utilities import get_key_to_last_completed_course_block
@@ -58,12 +62,22 @@ from student.models import (
 from util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore
 
-log = logging.getLogger("edx.student")
 
+# from badges.api.views import UserBadgeAssertions
+from badges.models import BadgeAssertion
+from badges.backends.badgr import BadgrBackend
+
+LOG = logging.getLogger("edx.student")
+
+BADGR_ACCESS_TOKEN = '7tzSR86gK8hICrTmGdsshvyB1GTmEI'
+# 7tzSR86gK8hICrTmGdsshvyB1GTmEI
+
+BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
+BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
 
 def get_org_black_and_whitelist_for_site():
     """
-    Returns the org blacklist and whitelist for the current site.
+    Returns the org blacklist and whitelist for the current site.~
 
     Returns:
         (org_whitelist, org_blacklist): A tuple of lists of orgs that serve as
@@ -130,7 +144,7 @@ def _allow_donation(course_modes, course_id, enrollment):
             text_type(course_id): [mode.slug for mode in modes]
             for course_id, modes in iteritems(CourseMode.all_modes_for_courses([course_id]))
         }
-        log.error(
+        LOG.error(
             u'Can not find `%s` in course modes.`%s`. All modes: `%s`',
             course_id,
             flat_unexpired_modes,
@@ -210,10 +224,10 @@ def get_course_enrollments(user, org_whitelist, org_blacklist):
     """
     for enrollment in CourseEnrollment.enrollments_for_user_with_overviews_preload(user):
 
-        # If the course is missing or broken, log an error and skip it.
+        # If the course is missing or broken, LOG an error and skip it.
         course_overview = enrollment.course_overview
         if not course_overview:
-            log.error(
+            LOG.error(
                 "User %s enrolled in broken or non-existent course %s",
                 user.username,
                 enrollment.course_id
@@ -325,7 +339,7 @@ def is_course_blocked(request, redeemed_registration_codes, course_key):
                 blocked = True
                 # disabling email notifications for unpaid registration courses
                 Optout.objects.get_or_create(user=request.user, course_id=course_key)
-                log.info(
+                LOG.info(
                     u"User %s (%s) opted out of receiving emails from course %s",
                     request.user.username,
                     request.user.email,
@@ -497,7 +511,7 @@ def _credit_statuses(user, course_enrollments):
             provider_id = purchased_credit_providers.get(course_key)
             if provider_id is None:
                 status["error"] = True
-                log.error(
+                LOG.error(
                     u"Could not find credit provider associated with credit enrollment "
                     u"for user %s in course %s.  The user will not be able to see his or her "
                     u"credit request status on the student dashboard.  This attribute should "
@@ -533,6 +547,37 @@ def _get_urls_for_resume_buttons(user, enrollments):
     return resume_button_urls
 
 
+
+def log_if_raised(response, data=""):
+    """
+    Log server response if there was an error.
+    """
+    LOG.info("BADGE_CLASS: In log_if_raised.. RESPONSE: headers: {}, text: {}".format(response.headers, response.text))
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        LOG.error(
+            u"Encountered an error when contacting the Badgr-Server. Request sent to %r with headers %r.\n"
+            u"and data values %r\n"
+            u"Response status was %s.\n%s",
+            response.request.url, response.request.headers,
+            data,
+            response.status_code, response.content
+        )
+        raise
+
+def get_headers():
+    """
+    Headers to send along with the request-- used for authentication.
+    """
+    LOG.info("DASHBOARD: In _get_headers.. the BADGR_API_TOKEN is: {}".format(BADGR_ACCESS_TOKEN))
+    ret = {
+        'Authorization': 'Bearer ' + BADGR_ACCESS_TOKEN
+          }
+    return ret 
+
+
+
 @login_required
 @ensure_csrf_cookie
 @add_maintenance_banner
@@ -550,8 +595,142 @@ def student_dashboard(request):
 
     """
     user = request.user
+    LOG.info("DASHBOARD: In student_dashboard.. the user.username is: {} user.email is: {}".format(user.username, user.email))
+
     if not UserProfile.objects.filter(user=user).exists():
         return redirect(reverse('account_settings'))
+
+
+    ### EPIPHANY ###
+    edx_assertions_epiphany = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
+    LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
+    LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
+    
+    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/CM-sak0wQuCty2BfSEle3A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
+    log_if_raised(response)
+
+    badgr_assertions_epiphany = response.json()
+    LOG.info("DASHBOARD: In student_dashboard.. the response get_assertions badgr_server is: {}".format(badgr_assertions_epiphany))
+
+    # this filters the assertions from badgr server to just this user
+    length = len(badgr_assertions_epiphany['result'])
+    LOG.info("DASHBOARD: In student_dashboard.. the num of all ba_assertions is: {}".format(length))
+
+    filtered_badgr_assertions_epiphany = []
+
+    for a in badgr_assertions_epiphany['result']:
+        identity = a['recipient']['identity']
+        LOG.info("DASHBOARD: In student_dashboard.. a['entityId']: {}, user.email: {}".format(identity, user.email))
+        if identity == user.email:
+            filtered_badgr_assertions_epiphany.append(a)
+
+    LOG.info('DASHBOARD: num filtered_badgr_assertions_epiphany: {}'.format(len(filtered_badgr_assertions_epiphany)))
+    badgr_assertions_epiphany['result'] = filtered_badgr_assertions_epiphany
+    LOG.info("DASHBOARD: In student_dashbord.. the NEW badgr_assertions_epiphany num is: {}, badgr_assertions_epiphany['result']: {}".format(len(badgr_assertions_epiphany['result']), badgr_assertions_epiphany['result']))
+
+    LOG.info("DASHBOARD: In student_dashboard.. the number of edx_assertions_epiphany is: {}".format(len(edx_assertions_epiphany)))
+    LOG.info("DASHBOARD: In student_dashboard.. the number of badgr_assertions_epiphany is: {}".format(len(badgr_assertions_epiphany['result'])))
+
+
+    ## COURSE ###
+    edx_assertions_course = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_COURSE)
+    response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/RBNmTgTUTQC4o_0-yDIA4g/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
+    log_if_raised(response)
+
+    badgr_assertions_course = response.json()
+    length = len(badgr_assertions_course['result'])
+    filtered_badgr_assertions_course = []
+    for a in badgr_assertions_course['result']:
+        identity = a['recipient']['identity']
+        if identity == user.email:
+            filtered_badgr_assertions_course.append(a)
+    badgr_assertions_course['result'] = filtered_badgr_assertions_course
+
+
+
+    ### OBJECT ###
+
+    num_epiph_asserts = 0
+    num_course_asserts = 0
+
+    epiph_slug = None
+
+    pc_pkg = {
+        "num_epiph_asserts": 0,
+        "num_course_asserts": 0,
+        "epiphany_badgeclass_id": "",
+        "username": user.username,
+        "useremail": user.email
+    }
+
+    pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions_epiphany['result'])
+    pc_pkg['num_course_asserts'] = num_course_asserts = len(badgr_assertions_course['result'])
+    
+    LOG.info("DASHBOARD: In student_dashboard.. num_epiph_asserts: {} num_course_asserts: {}".format(pc_pkg['num_epiph_asserts'], pc_pkg['num_course_asserts']))
+    ### OBJECT ###
+
+    ### EPIPHANY ###
+    if len(badgr_assertions_epiphany['result']) == 0:
+        for ea in edx_assertions_epiphany:
+            ba = BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug'])
+            LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba.name))
+            BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
+    else:
+        matched = False
+        ea_server_slug = None         
+        for ea in edx_assertions_epiphany:
+            if matched == True:
+                # uses the ea from the last iteration to DELETE the ea record
+                LOG.info("DASHBOARD: In student_dashboard.. DELETING edx_assertion: {}".format("ea_server_slug"))
+                BadgeAssertion.objects.filter(user=user, slug='epiphany', badgr_server_slug=ea_server_slug).delete()
+            matched = False
+            ea_id = ea['user']['useremail']
+            ea_server_slug = ea['badgr_server_slug']
+            for i in len(badgr_assertions_epiphany['result']):
+                ba = badgr_assertions_epiphany['result'][i]
+                ba_server_slug = ba['entityId']
+                if ba_server_slug == ea_server_slug:
+                    matched = True
+
+
+    ### COURSE ###
+    if len(badgr_assertions_course['result']) == 0:
+        for ea in edx_assertions_course:
+            ba = BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug'])
+            LOG.info("DASHBOARD: In student_dashboard.. found edx_assertion to delete (no match): {0}".format(ba.name))
+            BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
+    else:
+        matched = False
+        ea_server_slug = None         
+        for ea in edx_assertions_course:
+            if matched == True:
+                # uses the ea from the last iteration to DELETE the ea record
+                LOG.info("DASHBOARD: In student_dashboard.. DELETING edx_assertion: {}".format("ea_server_slug"))
+                BadgeAssertion.objects.filter(user=user, slug='course', badgr_server_slug=ea_server_slug).delete()
+            matched = False
+            ea_id = ea['user']['useremail']
+            ea_server_slug = ea['badgr_server_slug']
+            for i in len(badgr_assertions_course['result']):
+                ba = badgr_assertions_course['result'][i]
+                ba_server_slug = ba['entityId']
+                if ba_server_slug == ea_server_slug:
+                    matched = True
+
+
+
+
+
+
+
+
+
+
+    ea_new_assertion_cnt = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY).count()
+    LOG.info("DASHBOARD: In student_dashboard.. the NEW edx_assertion_cnt is: {}".format(ea_new_assertion_cnt))
+
+    pc_pkg_str = json.dumps(pc_pkg)
+
+    ### END ###
 
     platform_name = configuration_helpers.get_value("platform_name", settings.PLATFORM_NAME)
 
@@ -618,6 +797,7 @@ def student_dashboard(request):
     if not user.is_active:
         activate_account_message = Text(_(
             "Check your {email_start}{email}{email_end} inbox for an account activation link from {platform_name}. "
+            "If you do not see the email in your inbox, be sure to check your spam folder."
             "If you need help, contact {link_start}{platform_name} Support{link_end}."
         )).format(
             platform_name=platform_name,
@@ -812,13 +992,15 @@ def student_dashboard(request):
         ]
 
     context = {
+        'pc_pkg': pc_pkg,
+        'pc_pkg_str': pc_pkg_str,
         'urls': urls,
         'programs_data': programs_data,
         'enterprise_message': enterprise_message,
         'consent_required_courses': consent_required_courses,
         'enterprise_customer_name': enterprise_customer_name,
         'enrollment_message': enrollment_message,
-        'redirect_message': Text(redirect_message),
+        'redirect_message': redirect_message,
         'account_activation_messages': account_activation_messages,
         'activate_account_message': activate_account_message,
         'course_enrollments': course_enrollments,
@@ -882,3 +1064,7 @@ def student_dashboard(request):
     response = render_to_response('dashboard.html', context)
     set_logged_in_cookies(request, response, user)
     return response
+
+
+
+
