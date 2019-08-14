@@ -1,6 +1,7 @@
 """
 Database models for the badges app
 """
+import logging
 from importlib import import_module
 
 from config_models.models import ConfigurationModel
@@ -19,15 +20,21 @@ from opaque_keys.edx.keys import CourseKey
 from badges.utils import deserialize_count_specs
 from xmodule.modulestore.django import modulestore
 
+# Mine
+from django.core.files import File
+
+
+LOGGER = logging.getLogger(__name__)
 
 def validate_badge_image(image):
     """
     Validates that a particular image is small enough to be a badge and square.
     """
-    if image.width != image.height:
-        raise ValidationError(_(u"The badge image must be square."))
-    if not image.size < (250 * 1024):
-        raise ValidationError(_(u"The badge image file size must be less than 250KB."))
+    # if image.width != image.height:
+    #     raise ValidationError(_(u"The badge image must be square."))
+    # if not image.size < (250 * 1024):
+    #     raise ValidationError(_(u"The badge image file size must be less than 250KB."))
+    pass
 
 
 def validate_lowercase(string):
@@ -48,15 +55,18 @@ class BadgeClass(models.Model):
     """
     Specifies a badge class to be registered with a backend.
     """
-    slug = models.SlugField(max_length=255, validators=[validate_lowercase])
-    issuing_component = models.SlugField(max_length=50, default='', blank=True, validators=[validate_lowercase])
+    slug = models.SlugField(max_length=255)
+    badgr_server_slug = models.SlugField(max_length=255, default='')
+    issuing_component = models.SlugField(max_length=50, default='', blank=True)
     display_name = models.CharField(max_length=255)
     course_id = CourseKeyField(max_length=255, blank=True, default=None)
     description = models.TextField()
     criteria = models.TextField()
     # Mode a badge was awarded for. Included for legacy/migration purposes.
     mode = models.CharField(max_length=100, default='', blank=True)
-    image = models.ImageField(upload_to='badge_classes', validators=[validate_badge_image])
+    image = models.ImageField(upload_to='public/img/', validators=[validate_badge_image])
+    # image_url = models.URLField(null=True)
+
 
     def __unicode__(self):
         return u"<Badge '{slug}' for '{issuing_component}'>".format(
@@ -65,7 +75,7 @@ class BadgeClass(models.Model):
 
     @classmethod
     def get_badge_class(
-            cls, slug, issuing_component, display_name=None, description=None, criteria=None, image_file_handle=None,
+            cls, slug, issuing_component, display_name=None, description=None, criteria=None, image=None,
             mode='', course_id=None, create=True
     ):
         """
@@ -77,6 +87,9 @@ class BadgeClass(models.Model):
         and it will 'do the right thing'. It should be the exception, rather than the common case, that a badge class
         would need to be looked up without also being created were it missing.
         """
+
+
+        LOGGER.info("BADGES_APP.. In get_badge_class..")
         slug = slug.lower()
         issuing_component = issuing_component.lower()
         if course_id and not modulestore().get_course(course_id).issue_badges:
@@ -96,11 +109,16 @@ class BadgeClass(models.Model):
             mode=mode,
             description=description,
             criteria=criteria,
+            image=image
         )
-        badge_class.image.save(image_file_handle.name, image_file_handle)
-        badge_class.full_clean()
+        # badge_class.full_clean()
         badge_class.save()
         return badge_class
+
+
+    def save(self, *args, **kwargs):
+        if not self.image:
+            img_tmp = Name
 
     @lazy
     def backend(self):
@@ -121,7 +139,7 @@ class BadgeClass(models.Model):
         """
         Contacts the backend to have a badge assertion created for this badge class for this user.
         """
-        return self.backend.award(self, user, evidence_url=evidence_url)
+        return self.backend.award(self, user)
 
     def save(self, **kwargs):
         """
@@ -130,6 +148,9 @@ class BadgeClass(models.Model):
         self.slug = self.slug and self.slug.lower()
         self.issuing_component = self.issuing_component and self.issuing_component.lower()
         super(BadgeClass, self).save(**kwargs)
+
+    def assertions_for_user(self, user):
+        return BadgeAssertion.assertions_for_user(user)
 
     class Meta(object):
         app_label = "badges"
@@ -140,13 +161,17 @@ class BadgeClass(models.Model):
 class BadgeAssertion(TimeStampedModel):
     """
     Tracks badges on our side of the badge baking transaction
+    Just to trigger a refresh on github.. remove me!
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = user = User.objects.get(username=member['user'])
     badge_class = models.ForeignKey(BadgeClass, on_delete=models.CASCADE)
     data = JSONField()
     backend = models.CharField(max_length=50)
-    image_url = models.URLField()
-    assertion_url = models.URLField()
+    image_url = models.URLField(null=True)
+    assertion_url = models.URLField(null=True)
+    badgr_server_slug = models.SlugField(max_length=255, default='')
+
 
     def __unicode__(self):
         return u"<{username} Badge Assertion for {slug} for {issuing_component}".format(
@@ -155,12 +180,13 @@ class BadgeAssertion(TimeStampedModel):
         )
 
     @classmethod
-    def assertions_for_user(cls, user, course_id=None):
+    def assertions_for_user(cls, user):
         """
         Get all assertions for a user, optionally constrained to a course.
         """
-        if course_id:
-            return cls.objects.filter(user=user, badge_class__course_id=course_id)
+        LOGGER.info("BADGE_CLASS: In assertions_for_user.. the user type is: {}".format(type(user)))
+        # if course_id:
+        #     return cls.objects.filter(user=user, course_id=course_id)
         return cls.objects.filter(user=user)
 
     class Meta(object):

@@ -256,6 +256,18 @@ $seq-nav-height: 50px;
     }
   }
 
+    &.button-mission-control {
+    order: 2;
+
+    @include media-breakpoint-up(md) {
+      @include right(0);
+      @include border-top-left-radius(0);
+      @include border-top-right-radius(3px);
+      @include border-bottom-right-radius(3px);
+      @include border-bottom-left-radius(0);
+    }
+  }
+
   &.button-next {
     order: 999;
 

@@ -109,7 +109,7 @@ class LogoutView(TemplateView):
                 logout_uris.append(self._build_logout_url(uri))
 
         context.update({
-            'target': self.target,
+            'target': "https://firstcontactcrypto.com",
             'logout_uris': logout_uris,
         })
 

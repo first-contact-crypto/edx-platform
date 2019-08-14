@@ -8,7 +8,7 @@ $(function() {
         <input class="schematic" height="300" width="500" id="schematic_editor" name="schematic" type="hidden" value=""/> \
       </div> \
       <div class="modal-footer"> \
-        <button type="button" id="circuit_save_btn" class="btn btn-primary" data-dismiss="modal"> \
+        <button type="button" id="circuit_save_btn" class="btn btn-outline-success " data-dismiss="modal"> \
           Save circuit \
         </button> \
       </div> \

@@ -9,7 +9,7 @@
                     <%- urlLabel %></label>
                 <input type="text" id="new-url-input" class="field-input input-text" aria-describedby="new-url-input-help">
                 <% if (imageUploadHandler) { %>
-                    <button id="file-upload-proxy" class="btn btn-primary btn-base form-btn">
+                    <button id="file-upload-proxy" class="btn btn-outline-success  btn-base form-btn">
                         <%- chooseFileText %>
                     </button>
                     <input type="file" name="file-upload" id="file-upload" style="display:none;"/>
@@ -44,7 +44,7 @@
             %></div>
         </fieldset>
         <div class="form-actions">
-            <input type="button" id="new-link-image-ok" class="btn btn-primary form-btn" value="<%- okText %>" />
+            <input type="button" id="new-link-image-ok" class="btn btn-outline-success  form-btn" value="<%- okText %>" />
             <input type="button" id="new-link-image-cancel" class="btn btn-outline-primary form-btn" value="<%- cancelText %>" >
         </div>
     </form>

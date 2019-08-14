@@ -694,7 +694,6 @@ class CourseMode(models.Model):
         eligible.
         """
         ineligible_modes = [cls.AUDIT]
-
         if settings.FEATURES['DISABLE_HONOR_CERTIFICATES']:
             ineligible_modes.append(cls.HONOR)
 

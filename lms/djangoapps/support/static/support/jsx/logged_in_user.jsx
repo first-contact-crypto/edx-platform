@@ -91,7 +91,7 @@ function LoggedInUser({ userInformation, setErrorState, zendeskApiHost, submitFo
     <div className="row">
       <div className="col-sm-12">
         <button
-          className="btn btn-primary btn-submit"
+          className="btn btn-outline-success  btn-submit"
           onClick={submitForm}
         >{gettext('Submit')}</button>
       </div>

@@ -1,13 +1,19 @@
 // discussion - utilities - variables
 // ====================
 
+$inverse: #000;
+$primary: #fff;
+$success: green;
+
 // base color variables
-$forum-color-primary: rgb(0, 117, 180) !default;
+// $forum-color-primary: rgb(0, 117, 180) !default;
+$forum-color-primary: $primary;
 $forum-color-copy-light: rgb(65, 65, 65) !default;
-$forum-color-background-light: rgb(245, 245, 245) !default;
+// $forum-color-background-light: rgb(245, 245, 245) !default;
+$forum-color-background-light: #000;
 
 // contextual color variables
-$forum-color-background: $white;
+$forum-color-background: $inverse;
 $forum-color-active-thread: $forum-color-primary !default;
 $forum-color-hover: rgb(6, 86, 131) !default;
 $forum-color-active-text: $white !default;
@@ -18,7 +24,8 @@ $forum-color-following: $forum-color-primary !default;
 $forum-color-staff: $forum-color-primary !default;
 $forum-color-community-ta: rgb(0, 129, 0) !default;
 $forum-color-marked-answer: rgb(0, 129, 0) !default;
-$forum-color-border: rgb(217, 217, 217) !default;
+// $forum-color-border: rgb(217, 217, 217) !default;
+$forum-color-border: $success;
 $forum-color-error: rgb(203, 7, 18) !default;
 $forum-color-hover-thread: $forum-color-background-light !default;
 $forum-color-reading-thread: $forum-color-background-light !default;
@@ -28,7 +35,8 @@ $forum-color-editor-preview-label: $forum-color-copy-light !default;
 $forum-color-response-count: $forum-color-copy-light !default;
 $forum-color-navigation-bar: $forum-color-background-light !default;
 $forum-color-count: $forum-color-copy-light !default;
-$forum-color-background-label: rgb(65, 65, 65) !default;
+// $forum-color-background-label: rgb(65, 65, 65) !default;
+$forum-color-count: $primary;
 
 // post images
 $post-image-dimension: ($baseline*3) !default;  // image size  + margin

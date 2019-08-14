@@ -1357,7 +1357,7 @@ class ProgressPageTests(ProgressPageBaseTests):
             mode='honor'
         )
 
-        # Enable the feature, but do not enable it for this course
+        # Enable the feature, but do not enable it for this courseEnable the feature, but do not enable it for this course
         CertificateGenerationConfiguration(enabled=True).save()
 
         # Enable certificate generation for this course
@@ -1380,7 +1380,6 @@ class ProgressPageTests(ProgressPageBaseTests):
         self.course.cert_html_view_enabled = True
         self.course.save()
         self.store.update_item(self.course, self.user.id)
-
         with patch('lms.djangoapps.grades.course_grade_factory.CourseGradeFactory.read') as mock_create:
             course_grade = mock_create.return_value
             course_grade.passed = True
@@ -1535,7 +1534,6 @@ class ProgressPageTests(ProgressPageBaseTests):
         self.course.cert_html_view_enabled = True
         self.course.save()
         self.store.update_item(self.course, self.user.id)
-
         with patch('lms.djangoapps.grades.course_grade_factory.CourseGradeFactory.read') as mock_create:
             course_grade = mock_create.return_value
             course_grade.passed = True
@@ -1578,14 +1576,12 @@ class ProgressPageTests(ProgressPageBaseTests):
             course_id=self.course.id,
             whitelist=True
         )
-
         with patch('lms.djangoapps.grades.course_grade_factory.CourseGradeFactory.read') as mock_create:
             course_grade = mock_create.return_value
             course_grade.passed = False
             course_grade.summary = {
                 'grade': 'Fail', 'percent': 0.75, 'section_breakdown': [], 'grade_breakdown': {}
             }
-
             resp = self._get_progress_page()
             self.assertContains(resp, u"View Certificate")
             self.assert_invalidate_certificate(generated_certificate)
@@ -1599,12 +1595,10 @@ class ProgressPageTests(ProgressPageBaseTests):
         generated_certificate = self.generate_certificate(
             "http://www.example.com/certificate.pdf", "honor"
         )
-
         with patch('lms.djangoapps.grades.course_grade_factory.CourseGradeFactory.read') as mock_create:
             course_grade = mock_create.return_value
             course_grade.passed = True
             course_grade.summary = {'grade': 'Pass', 'percent': 0.75, 'section_breakdown': [], 'grade_breakdown': {}}
-
             resp = self._get_progress_page()
             self.assertContains(resp, u'Download Your Certificate')
             self.assert_invalidate_certificate(generated_certificate)

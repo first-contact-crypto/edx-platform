@@ -19,7 +19,13 @@ def send_activation_email(self, subject, message, from_address, dest_addr):
     """
     max_retries = settings.RETRY_ACTIVATION_EMAIL_MAX_ATTEMPTS
     retries = self.request.retries
+    info = {}
+    info['subject'] = subject
+    info['message'] = message
+    info['from_address'] = from_address
+    info['dest_addr'] = dest_addr
     try:
+        log.info("TASKS.PY: In send_activation_email: {}".format(info))
         mail.send_mail(subject, message, from_address, [dest_addr], fail_silently=False)
         # Log that the Activation Email has been sent to user without an exception
         log.info("Activation Email has been sent to User {user_email}".format(

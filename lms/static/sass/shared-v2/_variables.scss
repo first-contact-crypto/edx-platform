@@ -6,6 +6,11 @@
 // #TYPOGRAPHY:     Font definitions and scales
 // #ICONS:          Icon specific colors + other styling
 
+$inverse: black;
+$primary: white;
+$success: green;
+$accent: blue;
+
 // ----------------------------
 // #GRID
 // ----------------------------
@@ -18,12 +23,14 @@ $grid-breakpoints-lg: 992px !default;
 // ----------------------------
 
 $gray: $gray-600 !default;
-$lms-container-background-color: theme-color("inverse") !default;
+// $lms-container-background-color: theme-color("inverse") !default;
+$lms-container-background-color: $inverse;
 $lms-preview-menu-color: $gray-400 !default;
 $success-color-hover: darken($success, 15%) !default;
 $lms-hero-color: #005e90 !default;
 
-$button-bg-hover-color: $white !default;
+// $button-bg-hover-color: $white !default;
+$button-bg-hover-color: $inverse;
 
 $white-transparent: rgba(255, 255, 255, 0) !default;
 $white-opacity-40: rgba(255, 255, 255, 0.4) !default;
@@ -40,9 +47,11 @@ $black-t3:  rgba($black, 0.75) !default;
 $light-grey-transparent: rgba(200, 200, 200, 0) !default;
 $light-grey-solid: rgba(200, 200, 200, 1) !default;
 
-$header-border-color: $gray-l1 !default;
+// $header-border-color: $gray-l1 !default;
+$header-border-color: $success;
 
-$table-bg-accent:               #f9f9f9 !default;
+// $table-bg-accent:               #f9f9f9 !default;
+$table-bg-accent: $accent;
 
 // ----------------------------
 // #TYPOGRAPHY
