@@ -69,9 +69,7 @@ class TestFooter(TestCase):
     def test_get_footer(self):
         actual_footer = get_footer(is_secure=True)
         expected_footer = {
-            'copyright': '\xa9 \xe9dX.  All rights reserved except where noted. '
-                         ' edX, Open edX and their respective logos are '
-                         'registered trademarks of edX Inc.',
+            'copyright': '\xa9 \xe9dX.  All rights reserved except where noted. ',
             'navigation_links': [
                 {'url': 'https://edx.org/about-us', 'name': 'about', 'title': 'About'},
                 {'url': 'https://edx.org/enterprise', 'name': 'enterprise', 'title': '\xe9dX for Business'},
