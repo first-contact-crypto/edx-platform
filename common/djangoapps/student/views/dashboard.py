@@ -69,8 +69,8 @@ from badges.backends.badgr import BadgrBackend
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = 'CBLgWi0AL9sHIguEuEK0tW3gHXNg7I'
-# CBLgWi0AL9sHIguEuEK0tW3gHXNg7I
+BADGR_ACCESS_TOKEN = 'X6XMu9VM8l9ABsF55tNyIfAabiUx6P'
+# X6XMu9VM8l9ABsF55tNyIfAabiUx6P
 
 BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
 BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
@@ -574,7 +574,7 @@ def get_headers():
     ret = {
         'Authorization': 'Bearer ' + BADGR_ACCESS_TOKEN
           }
-    return ret 
+    return ret
 
 
 
@@ -605,7 +605,7 @@ def student_dashboard(request):
     edx_assertions_epiphany = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
     LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
-    
+
     response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/CM-sak0wQuCty2BfSEle3A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
 
@@ -665,7 +665,7 @@ def student_dashboard(request):
 
     pc_pkg['num_epiph_asserts'] = num_epiph_asserts = len(badgr_assertions_epiphany['result'])
     pc_pkg['num_course_asserts'] = num_course_asserts = len(badgr_assertions_course['result'])
-    
+
     LOG.info("DASHBOARD: In student_dashboard.. num_epiph_asserts: {} num_course_asserts: {}".format(pc_pkg['num_epiph_asserts'], pc_pkg['num_course_asserts']))
     ### OBJECT ###
 
@@ -677,7 +677,7 @@ def student_dashboard(request):
             BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
     else:
         matched = False
-        ea_server_slug = None         
+        ea_server_slug = None
         for ea in edx_assertions_epiphany:
             if matched == True:
                 # uses the ea from the last iteration to DELETE the ea record
@@ -701,7 +701,7 @@ def student_dashboard(request):
             BadgeAssertion.objects.filter(user=user, badgr_server_slug=ea['badgr_server_slug']).delete()
     else:
         matched = False
-        ea_server_slug = None         
+        ea_server_slug = None
         for ea in edx_assertions_course:
             if matched == True:
                 # uses the ea from the last iteration to DELETE the ea record
