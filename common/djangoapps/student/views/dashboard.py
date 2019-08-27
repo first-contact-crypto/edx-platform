@@ -69,8 +69,8 @@ from badges.backends.badgr import BadgrBackend
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = 'X6XMu9VM8l9ABsF55tNyIfAabiUx6P'
-# X6XMu9VM8l9ABsF55tNyIfAabiUx6P
+BADGR_ACCESS_TOKEN = '7jqEjjsWLYsiiFpRU7Y6MIvbTKFLMF'
+# 7jqEjjsWLYsiiFpRU7Y6MIvbTKFLMF
 
 BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
 BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
