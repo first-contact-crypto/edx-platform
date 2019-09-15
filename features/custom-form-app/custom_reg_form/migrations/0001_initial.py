@@ -16,8 +16,8 @@ class Migration(migrations.Migration):
             name='ExtraInfo',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('promo_code', models.CharField(max_length=100, verbose_name=b'Fav Flick', error_messages={b'required': 'Please tell us your favorite movie.', b'invalid': "We're pretty sure you made that movie up."})),
-                ('promo_code', models.CharField(blank=True, max_length=5, verbose_name=b'Favorite Editor', choices=[(b'vim', b'Vim'), (b'emacs', b'Emacs'), (b'np', b'Notepad'), (b'cat', b'cat > filename')])),
+                ('promo_code2', models.CharField(max_length=100, verbose_name=b'Fav Flick', error_messages={b'required': 'Please tell us your favorite movie.', b'invalid': "We're pretty sure you made that movie up."})),
+                ('promo_code2', models.CharField(blank=True, max_length=5, verbose_name=b'Favorite Editor', choices=[(b'vim', b'Vim'), (b'emacs', b'Emacs'), (b'np', b'Notepad'), (b'cat', b'cat > filename')])),
                 ('user', models.OneToOneField(null=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
