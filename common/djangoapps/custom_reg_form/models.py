@@ -12,7 +12,7 @@ class ExtraInfo(models.Model):
     """
     user = models.OneToOneField(USER_MODEL, null=True)
 
-    promo_code2 = models.CharField(
+    promo_code = models.CharField(
         verbose_name="Promo Code",
         max_length=25,
     )
