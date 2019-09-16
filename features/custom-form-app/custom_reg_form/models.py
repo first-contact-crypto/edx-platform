@@ -12,3 +12,6 @@ class ExtraInfo(models.Model):
     """
     user = models.OneToOneField(USER_MODEL, null=True)
     promo_code = models.CharField(verbose_name="Promo Code", max_length=25)
+
+    def __str__(self):
+        return self.promo_code
