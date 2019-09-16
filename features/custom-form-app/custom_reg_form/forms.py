@@ -14,4 +14,4 @@ class ExtraInfoForm(ModelForm):
 
     class Meta(object):
         model = ExtraInfo
-        fields = ('promo_code')
+        fields = ('promo_code',)
