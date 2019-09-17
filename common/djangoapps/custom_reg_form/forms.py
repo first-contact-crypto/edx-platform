@@ -7,7 +7,7 @@ class ExtraInfoForm(ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super(ExtraInfoForm, self).__init__(*args, **kwargs)
-        self.fields['promo_code2'].error_messages = {
+        self.fields['promo_code'].error_messages = {
             "optional": u"Please submit Promo Code.",
             "invalid": u"Not an applicable answer",
         }
