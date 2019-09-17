@@ -11,7 +11,7 @@ class ExtraInfo(models.Model):
     The form that wraps this model is in the forms.py file.
     """
     user = models.OneToOneField(USER_MODEL, null=True)
-    promo_code = models.CharField(verbose_name="Promo Code", max_length=25)
+    promo_code = models.CharField(verbose_name="Promo Code", max_length=25, blank=True, null=True)
 
     def __str__(self):
         return self.promo_code
