@@ -66,6 +66,7 @@ from xmodule.modulestore.django import modulestore
 # from badges.api.views import UserBadgeAssertions
 from badges.models import BadgeAssertion
 from badges.backends.badgr import BadgrBackend
+from custom_reg_form.models import ExtraInfo
 
 LOG = logging.getLogger("edx.student")
 
@@ -602,6 +603,12 @@ def student_dashboard(request):
 
 
     ### EPIPHANY ###
+    # promo_code
+    promo_codes = ExtraInfo.objects.filter(user=user)
+    LOG.info("DASHBOARD: In student_dashboard.. the promo_codes are: ".format(promo_codes))
+    if promo_codes and 'FREE'
+
+
     edx_assertions_epiphany = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
     LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
