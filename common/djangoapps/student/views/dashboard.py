@@ -70,8 +70,8 @@ from custom_reg_form.models import ExtraInfo
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = 'OmyIa8E70dTteqE9WjohB0DRLFEOKF'
-# OmyIa8E70dTteqE9WjohB0DRLFEOKF
+BADGR_ACCESS_TOKEN = 'UCzxiMjT3bdW5x1mRQARGN6GQMon8a'
+# UCzxiMjT3bdW5x1mRQARGN6GQMon8a
 
 BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
 BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
