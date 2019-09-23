@@ -603,11 +603,6 @@ def student_dashboard(request):
 
 
     ### EPIPHANY ###
-    # promo_code
-    promo_codes = ExtraInfo.objects.filter(user=user)
-    LOG.info("DASHBOARD: In student_dashboard.. the promo_codes are: ".format(promo_codes))
-    if promo_codes and 'FREE'
-
 
     edx_assertions_epiphany = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
