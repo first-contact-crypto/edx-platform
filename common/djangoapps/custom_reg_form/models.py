@@ -35,4 +35,3 @@ class ExtraInfo(models.Model):
             be = BadgrBackend()
             for i in len(NUM_EPIPH_AWARDED):
                 be.award(bc, self.user)
-    )
