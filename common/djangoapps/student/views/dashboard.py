@@ -66,6 +66,7 @@ from xmodule.modulestore.django import modulestore
 # from badges.api.views import UserBadgeAssertions
 from badges.models import BadgeAssertion
 from badges.backends.badgr import BadgrBackend
+import base64
 
 LOG = logging.getLogger("edx.student")
 
@@ -727,7 +728,9 @@ def student_dashboard(request):
     ea_new_assertion_cnt = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY).count()
     LOG.info("DASHBOARD: In student_dashboard.. the NEW edx_assertion_cnt is: {}".format(ea_new_assertion_cnt))
 
+    ## package up pc_pkg_str to base64
     pc_pkg_str = json.dumps(pc_pkg)
+    pc_pkg_str = base64.b64encode(pc_pkg_str)
 
     ### END ###
 
