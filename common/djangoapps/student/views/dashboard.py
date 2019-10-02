@@ -984,6 +984,7 @@ def student_dashboard(request):
                                     (verification_status['status'] in valid_verification_statuses and
                                     verification_status['should_display']))
 
+
     # Filter out any course enrollment course cards that are associated with fulfilled entitlements
     for entitlement in [e for e in course_entitlements if e.enrollment_course_run is not None]:
         course_enrollments = [
