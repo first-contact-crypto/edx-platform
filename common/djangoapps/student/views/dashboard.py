@@ -66,11 +66,11 @@ from xmodule.modulestore.django import modulestore
 # from badges.api.views import UserBadgeAssertions
 from badges.models import BadgeAssertion
 from badges.backends.badgr import BadgrBackend
-import base64
+# import base64
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = 'qwmdUnRL6w1EpAKMDahcOHuSsCX6MC'
+BADGR_ACCESS_TOKEN = 'boWO7KgeDuYncExF0tGAjH9B8kZLOA'
 
 BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
 BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
@@ -730,7 +730,7 @@ def student_dashboard(request):
 
     ## package up pc_pkg_str to base64
     pc_pkg_str = json.dumps(pc_pkg)
-    pc_pkg_str = base64.b64encode(pc_pkg_str)
+    # pc_pkg_str = base64.b64encode(pc_pkg_str)
 
     ### END ###
 
