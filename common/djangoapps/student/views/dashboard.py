@@ -70,7 +70,7 @@ from badges.backends.badgr import BadgrBackend
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = '6NDxQ3mlaNe6OgtqIyoRRz5pRcl63T'
+BADGR_ACCESS_TOKEN = 'DgeDY81IGUwSkC0HO99xryJ9k882zS'
 
 BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
 BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
@@ -731,6 +731,7 @@ def student_dashboard(request):
     ## package up pc_pkg_str to base64
     pc_pkg_str = json.dumps(pc_pkg)
     # pc_pkg_str = base64.b64encode(pc_pkg_str)
+    LOG.info("DASHBOARD: In student_dashboard.. pc_pkg_str: {}".format(pc_pkg_str))
 
     ### END ###
 
