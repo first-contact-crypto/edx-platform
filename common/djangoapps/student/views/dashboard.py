@@ -70,7 +70,7 @@ from badges.backends.badgr import BadgrBackend
 
 LOG = logging.getLogger("edx.student")
 
-BADGR_ACCESS_TOKEN = 'SK3sq8rBVFW7lwX21SnKXCEeWch19w'
+BAT = 'L6vgkZDECZzjtoDkrpiglkBu70P4lr'
 
 BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
 BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
@@ -570,9 +570,9 @@ def get_headers():
     """
     Headers to send along with the request-- used for authentication.
     """
-    LOG.info("DASHBOARD: In _get_headers.. the BADGR_API_TOKEN is: {}".format(BADGR_ACCESS_TOKEN))
+    LOG.info("DASHBOARD: In _get_headers.. the BAT is: {}".format(BAT))
     ret = {
-        'Authorization': 'Bearer ' + BADGR_ACCESS_TOKEN
+        'Authorization': 'Bearer ' + BAT
           }
     return ret
 
@@ -604,7 +604,7 @@ def student_dashboard(request):
     ### EPIPHANY ###
     edx_assertions_epiphany = BadgeAssertion.objects.filter(user=user, badgr_server_slug=BADGR_SERVER_SLUG_EPIPHANY)
     LOG.info("DASHBOARD: In student_dashboard.. the edx_assertions_epiphany are: {}".format(edx_assertions_epiphany.values()))
-    LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BADGR_ACCESS_TOKEN))
+    LOG.info("DASHBOARD: In student_dashboard.. the badgr access token is: {}".format(BAT))
 
     response = requests.get('https://badgr.firstcontactcrypto.com/v2/badgeclasses/CM-sak0wQuCty2BfSEle3A/assertions', headers=get_headers(), timeout=settings.BADGR_TIMEOUT)
     log_if_raised(response)
