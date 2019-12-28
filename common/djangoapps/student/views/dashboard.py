@@ -70,7 +70,7 @@ from badges.backends.badgr import BadgrBackend
 
 LOG = logging.getLogger("edx.student")
 
-BAT = 'ac6n1mmE0Syu9gqhJYfaq1ZWfnYOpE'
+BAT = 'WuwP4ixhOtiILffrW6wZOYtDWW6j9F'
 
 BADGR_SERVER_SLUG_EPIPHANY = "CM-sak0wQuCty2BfSEle3A"
 BADGR_SERVER_SLUG_COURSE = "RBNmTgTUTQC4o_0-yDIA4g"
